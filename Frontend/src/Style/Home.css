@@ -1,0 +1,99 @@
+.text-container {
+  display: flex;
+  align-items: flex-start;
+  padding: 5rem;
+  background-color:#181818;;
+  font-family: 'Arial', sans-serif;
+  padding: 30px;
+  height: 150vh;
+}
+
+.header {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.header p{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 1.4em;
+  opacity: 70%;
+  margin-top: 0.6em;
+  color: #fff;
+}
+
+.header-title {
+  color: #ffff;
+  font-size:4.5rem;
+  font-weight: 700;
+  margin-top: 0.3em;
+  line-height: 1.2;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  width: 10em;
+}
+
+.event-description {
+  margin-top: 18.5rem;
+  font-size: 1.5rem;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.event-description p{
+  line-height: 1.4em;
+  align-content: start;
+  color: #fff;
+}
+
+.carousel {
+  background-color: #181818;
+  color: white;
+}
+
+.scrollRow {
+  margin-top: 50px;
+  height: 200vh;  /* Adjust height for scroll */
+  position: sticky;
+  overflow-x: scroll;  /* Enable horizontal scrolling */
+  overflow-y: hidden;  /* Hide vertical scroll */
+  top: 0;  /* Prevent overflow */
+  background-color: #d2abab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.images {
+  display: flex;  /* Align images horizontally */
+  gap: 3vw;
+  padding: 0 4rem;
+  width: max-content;  /* Ensure the container is wide enough */
+}
+
+.imageItem {
+  background: #2b2a2a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 22px;
+  flex-shrink: 0;  /* Prevent images from shrinking */
+}
+
+.imageItem img {
+  width: 340px;
+  height: 320px;
+  border-radius: 4%;
+}
+
+.imageItem p {
+  font-size: 1.2em;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  padding: 5px;
+  margin-top: 2px;
+}
+
+.boy{
+  height: 100vh;
+  width: 100vw;
+  background-color: #2b2a2a;
+}
