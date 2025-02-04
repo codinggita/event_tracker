@@ -3,12 +3,16 @@ import dotenv from "dotenv";
 import userRouter from "./Routes/user.js";
 import { connectDB } from "./data/database.js";
 import cors from "cors"; // Corrected import
+import path from 'path';
 
-dotenv.config(); // Load environment variables
-
+dotenv.config({ path: path.resolve('data', 'config.env') });
 const app = express(); // Initialize Express
 
-app.use(cors()); // Enable CORS
+// Enable CORS
+app.use(cors({
+  origin: "http://localhost:5173",  // Allow frontend to access the backend
+  credentials: true  // Allow cookies and authentication headers
+}));
 app.use(express.json()); // Middleware to parse JSON
 
 connectDB(); // Connect to the database
@@ -17,6 +21,6 @@ connectDB(); // Connect to the database
 app.use("/api/v1/users", userRouter);
 
 // Start the server
-app.listen(4000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server is working on port 4000");
 });
