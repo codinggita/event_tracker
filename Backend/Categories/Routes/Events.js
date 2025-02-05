@@ -1,5 +1,5 @@
 import express from "express";
-import { getTrendingEvents ,  getUpcomingEvents } from '../Controllers/Events.js';
+import { getTrendingEvents ,  getUpcomingEvents , getFestivalEvents , getBusinessEvents} from '../Controllers/Events.js';
 
 const router = express.Router();
 
@@ -9,4 +9,10 @@ router.get('/events/trending', getTrendingEvents);
 // Route to fetch upcoming events
 router.get('/events/upcoming', getUpcomingEvents);
 
-export default router   
+// Route to fetch upcoming events
+router.get('/events/festival', getFestivalEvents);
+
+// Route to fetch upcoming events
+router.get('/events/business', getBusinessEvents);
+
+export default router 
