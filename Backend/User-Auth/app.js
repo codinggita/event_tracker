@@ -11,12 +11,10 @@ const app = express(); // Initialize Express
 
 // Enable CORS
 app.use(cors({
-  origin: "http://localhost:5173",  // Allow frontend to access the backend
-  credentials: true  // Allow cookies and authentication headers
+  origin: 'http://localhost:5173', // Allow requests from your frontend
+  methods: ['GET', 'POST'],
+  credentials: true,
 }));
-app.use(express.json()); // Middleware to parse JSON
-app.use(cookieParser());
-
 connectDB(); // Connect to the database
 
 // Using Routes
