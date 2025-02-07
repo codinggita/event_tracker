@@ -10,11 +10,7 @@ dotenv.config({ path: path.resolve('data', 'config.env') });
 const app = express(); // Initialize Express
 
 // Enable CORS
-app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend
-  methods: ['GET', 'POST'],
-  credentials: true,
-}));
+app.use(cors());
 connectDB(); // Connect to the database
 
 // Using Routes
