@@ -1,0 +1,142 @@
+body {
+    background-color: #343333;
+    font-family: 'Arial', sans-serif;
+    color: aliceblue;
+}
+
+.trending-section {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 4.5em ;
+}
+
+.trending-section h2 {
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, rgb(30, 216, 223), rgb(139, 219, 45));
+    color: transparent;
+    background-clip: text;
+}
+
+.events-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    padding-bottom: 20px;
+}
+
+.event-card {
+    background: rgb(29, 28, 28);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.image-container {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    overflow-y: hidden;
+
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.bookmark-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.bookmark-btn:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.card-content {
+    padding: 16px;
+}
+
+.card-content h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.card-content .description {
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.venue {
+    color: #aaa;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.dot {
+    color: #666;
+}
+
+.interested {
+    color: #2563eb;
+}
+
+.price {
+    color: #16a34a;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.loading,
+.error {
+    padding: 24px;
+    text-align: center;
+    color: #666;
+}
+
+.error {
+    color: #dc2626;
+}
