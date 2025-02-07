@@ -1,49 +1,9 @@
-/*nav*/
-
+/* Video Section */
 .video-section {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-}
-
-.navbar1 {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  transition: background-color 0.3s ease;
-  padding: 20px 0;
-  overflow-y: hidden;
-}
-
-.navbar1.active {
-  background-color: rgba(32, 32, 32, 0.9);
-}
-
-.nav-container {
-  width: 90%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 28px;
-  font-weight: bold;
-  color: white;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  background: linear-gradient(to right, salmon, turquoise);
-    color: transparent;
-    background-clip: text;
-    display: inline-block;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
 }
 
 .background-video {
@@ -64,7 +24,6 @@
   color: white;
   transform: translateY(-50%);
   z-index: 2;
-  
 }
 
 .subheading {
@@ -72,7 +31,7 @@
   font-weight: 600;
   opacity: 0.8;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  background: linear-gradient(to right, rgb(66, 69, 19)turquoise);
+  background: linear-gradient(to right, rgb(66, 69, 19), turquoise);
   background-clip: text;
 }
 
@@ -82,52 +41,7 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.user {
-  width: 115px;
-  height: 46px;
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  margin-right: 20px;
-}
-
-.user span {
-  font-size: 17px;
-  font-weight: bold;
-  color: white;
-}
-
-.personIcone {
-  font-size: 27px;
-  color: white;
-}
-
-.menuIcone {
-  font-size: 35px;
-  cursor: pointer;
-  color: white;
-}
-
-@media (max-width: 768px) {
-  .nav-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .nav-right {
-    margin-top: 10px;
-  }
-
-  .user {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
-}
-
+/* Text Section */
 .text-container {
   padding: 5rem;
   background-color: #181818;
@@ -159,8 +73,8 @@
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   max-width: 60em;
   background: linear-gradient(to right, #911a80, #d42b45);
-      background-clip: text;
-      color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .event-description {
@@ -168,15 +82,14 @@
   font-size: 1.5rem;
   color: #fff;
   line-height: 1.6;
-  margin-left: 30em;
 }
 
 .event-description p {
   line-height: 1.4em;
   color: #fff;
-
 }
 
+/* Carousel Section */
 .carousel {
   background-color: #181818;
   color: white;
@@ -187,7 +100,7 @@
   padding: 0 5rem;
 }
 
-.artist h1{
+.artist h1 {
   text-shadow: 1px 1px 1px #000;
   font-size: 2.6em;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
@@ -230,18 +143,15 @@
   border-radius: 50%;
 }
 
-
-/* Container */
-/* Container to hold the entire slider */
+/* Container for Events */
 .allEvents {
   width: 100vw;
-  max-width: 1450px; /* Ensures consistent width */
+  max-width: 1450px;
   margin: auto;
   height: 90vh;
   background-color: #181818;
 }
 
-/* Slick carousel custom styling */
 .slick-slider {
   position: relative;
   overflow-y: hidden;
@@ -253,34 +163,33 @@
 
 .slick-dots li button:before {
   font-size: 30px;
-  color: white; /* Customize dot color */
+  color: white;
 }
 
 .slick-dots li.slick-active button:before {
-  color: #ffcc00; /* Active dot color */
+  color: #ffcc00;
 }
 
-/* Container for each event image */
+/* Event Image Containers */
 .event-img-container {
   position: relative;
   width: 100%;
-  max-width: 1450px; /* Ensures uniform width */
-  height: 620px; /* Set a fixed height */
-  overflow: hidden; /* Prevents any overflow issues */
+  max-width: 1450px;
+  height: 620px;
+  overflow: hidden;
   border-radius: 15px;
   margin-top: 1em;
 }
 
-/* Ensure all images are the same size */
 .event-img-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures the image fills the container without distortion */
+  object-fit: cover;
   border-radius: 15px;
   opacity: 75%;
 }
 
-/* Text overlay */
+/* Text Overlay */
 .text-overlay {
   position: absolute;
   bottom: 10%;
@@ -291,19 +200,16 @@
   width: 80%;
 }
 
-/* Subheading styling */
 .subheading {
   font-size: 1.4em;
   margin: 0 0 10px 0;
 }
 
-/* Main heading styling */
 .main-heading {
   font-size: 3em;
   margin: 0;
 }
 
-/* Call-to-action button */
 .cta-button {
   background-color: #ffffff;
   color: #333333;
@@ -319,8 +225,115 @@
   background-color: #eeeeee;
 }
 
-.box{
-  height: 100vh;
-  width: 100vw;
-  background-color: #0a0a0a;
+/* Navbar */
+.navbar-header {
+  position: relative;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  transition: background-color 0.3s ease;
+  padding: 20px 0;
+  overflow-y: hidden;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.navbar-scrolled {
+  background-color: rgba(32, 32, 32, 0.9);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  background: linear-gradient(to right, salmon, turquoise);
+  color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.search-container {
+  display: none;
+}
+
+.search-visible .search-container {
+  display: block;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 5px;
+  border-radius: 25px;
+}
+
+.search-icon {
+  color: white;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  color: white;
+  margin-left: 5px;
+  padding: 5px 10px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right .login-btn,
+.navbar-right .signup-btn {
+  margin-left: 10px;
+  color: white;
+  text-decoration: none;
+  background: none;
+}
+
+.navbar-right .create-event-btn {
+  margin-left: 20px;
+}
+
+.user-icon-btn {
+  margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-left {
+    margin-bottom: 10px;
+  }
+
+  .navbar-right {
+    margin-top: 10px;
+  }
+
+  .user {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .search-wrapper {
+    margin-top: 10px;
+  }
 }

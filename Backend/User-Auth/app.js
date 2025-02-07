@@ -4,6 +4,7 @@ import userRouter from "./Routes/user.js";
 import { connectDB } from "./data/database.js";
 import cors from "cors"; // Corrected import
 import path from 'path';
+import cookieParser from "cookie-parser";
 
 dotenv.config({ path: path.resolve('data', 'config.env') });
 const app = express(); // Initialize Express
@@ -14,6 +15,7 @@ app.use(cors({
   credentials: true  // Allow cookies and authentication headers
 }));
 app.use(express.json()); // Middleware to parse JSON
+app.use(cookieParser());
 
 connectDB(); // Connect to the database
 
