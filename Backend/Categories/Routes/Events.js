@@ -10,10 +10,10 @@ router.get('/events/trending', getTrendingEvents);
 router.get('/events/upcoming', getUpcomingEvents);
 
 // route to create event
-app.post("/createEvents", createEvents);
+router.post("/createEvents", createEvents);
   
 // Route to fetch events
-app.get("/showEvents", showEvents);
+router.get("/showEvents", showEvents);
   
 
 export default router 
