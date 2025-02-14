@@ -7,6 +7,8 @@ import {Toaster} from "react-hot-toast";
 import Trending from "./Pages/TrendingPage";
 import Upcoming from "./Pages/UpcomingPage";
 import Nav from "./Component/Nav";
+import Profile from "./Pages/Profile"
+import CreateEvent from "./Pages/CreateEvent";
 
 
 function Layout() {
@@ -26,6 +28,8 @@ function Layout() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/trending" element={<Trending />} />
           <Route path="/upcoming" element={<Upcoming />} />
+          <Route path="/profile" element={<Profile />}/>
+          <Route path="/createEvent" element={<CreateEvent />} />
         </Routes>
       
       <Toaster />

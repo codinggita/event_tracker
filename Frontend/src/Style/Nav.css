@@ -31,7 +31,10 @@
 }
 
 .search-container {
-  margin-left: 20px;
+  position: fixed; /* Ensure it's always visible on scroll */
+  top: 10px;
+  left: 20px;
+  z-index: 1001; /* Higher than the navbar */
 }
 
 .search-wrapper {
@@ -49,7 +52,7 @@
 
 .search-input {
   background: transparent;
-  border: none;
+  border: 1px solid white;
   color: #fff;
   outline: none;
   font-size: 14px;

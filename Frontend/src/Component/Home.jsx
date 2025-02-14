@@ -39,12 +39,6 @@ const Home = () => {
   const handleRedirect2 = () => {
     navigate("/upcoming");
   };
-  const handleRedirect3 = () => {
-    navigate("/festival");
-  };
-  const handleRedirect4 = () => {
-    navigate("/business");
-  };
 
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -146,22 +140,6 @@ const Home = () => {
               <h3 className="subheading">THE BEST WEDDING SINGERS AND MORE!</h3>
               <h1 className="main-heading">Upcoming Events</h1>
               <button className="cta-button" onClick={handleRedirect2}> →</button>
-            </div>
-          </div>
-          <div className="event-img-container">
-            <img src="https://img.freepik.com/premium-photo/photo-india-culture_195643-10592.jpg" alt="Festival Event" className="event-image" />
-            <div className="text-overlay">
-              <h3 className="subheading">THE BEST WEDDING SINGERS AND MORE!</h3>
-              <h1 className="main-heading">Festival Events</h1>
-              <button className="cta-button" onClick={handleRedirect3}> →</button>
-            </div>
-          </div>
-          <div className="event-img-container">
-            <img src="https://img.freepik.com/premium-photo/man-stands-podium-delivers-impressive-business-presentation-speech-audience_449728-18158.jpg" alt="Business Event" className="event-image" />
-            <div className="text-overlay">
-              <h3 className="subheading">THE BEST WEDDING SINGERS AND MORE!</h3>
-              <h1 className="main-heading">Business Events</h1>
-              <button className="cta-button" onClick={handleRedirect4}> →</button>
             </div>
           </div>
         </Slider>

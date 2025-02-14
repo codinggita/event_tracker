@@ -20,22 +20,24 @@ export const getUpcomingEvents = async (req, res) => {
   }
 }
 
-// Get Festival Events Controller
-export const getFestivalEvents = async (req, res) => {
+//create events
+export const createEvents =  async (req, res) => {
   try {
-    const festivalEvents = await Event.find({ status: "festival" }).sort({ date: 1 }); // Sort by date for festivals
-    res.json(festivalEvents);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const newEvent = new Event(req.body);
+    await newEvent.save();
+    res.status(201).json({ message: "Event Created", event: newEvent });
+  } catch (error) {
+    res.status(500).json({ message: "Error Creating Event" });
   }
-};
+}
 
-// Get Business Events Controller
-export const getBusinessEvents = async (req, res) => {
+//show Events
+export const showEvents =  async (req, res) => {
   try {
-    const businessEvents = await Event.find({ status: "business" }).sort({ date: 1 }); // Sort by date for business events
-    res.json(businessEvents);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const events = await Event.find();
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ message: "Error Fetching Events" });
   }
-};
+}
+

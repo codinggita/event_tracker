@@ -1,7 +1,6 @@
 "use client";
-
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { FaBars, FaCircleUser } from "react-icons/fa6";
 import { Search } from "lucide-react";
 import { Menu, MenuItem, IconButton, Avatar, Button } from "@mui/material";
@@ -34,6 +33,10 @@ export default function Navbar() {
     }
   };
 
+  const navigateProfile = () => {
+    navigate("/profile");
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -44,13 +47,20 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-      setShowSearch(window.scrollY > 100);
+      if (window.scrollY > 100) {
+        setIsScrolled(true);
+        setShowSearch(true);  // Ensure search bar is shown on scroll
+      } else {
+        setIsScrolled(false);
+        setShowSearch(false);
+      }
     };
-
+  
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
+  
 
   return (
     <header className={`navbar-header ${isScrolled ? "navbar-scrolled" : ""}`}>
@@ -75,7 +85,7 @@ export default function Navbar() {
         <div className="navbar-right">
           {isAuthenticated ? (
             <div className="auth-buttons">
-              <Button variant="outlined" className="create-event-btn">
+              <Button variant="outlined" className="create-event-btn" onClick={()=>{navigate('/createEvent')}}>
                 Create Event
               </Button>
               <IconButton onClick={handleClick} className="user-icon-btn">
@@ -94,7 +104,13 @@ export default function Navbar() {
                   horizontal: "right",
                 }}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={()=>{
+                   handleClose();
+                   navigateProfile();
+                }}
+                >
+                  Profile
+                  </MenuItem>
                 <MenuItem onClick={handleClose}>Settings</MenuItem>
                 <MenuItem
                   onClick={() => {
