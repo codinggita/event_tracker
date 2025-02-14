@@ -37,6 +37,10 @@ export default function Navbar() {
     navigate("/profile");
   };
 
+  const navigateEvents = () => {
+    navigate("/events")
+  }
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -85,6 +89,9 @@ export default function Navbar() {
         <div className="navbar-right">
           {isAuthenticated ? (
             <div className="auth-buttons">
+              <Button variant="outlined" className="create-event-btn" onClick={navigateEvents}>
+                Events
+              </Button>
               <Button variant="outlined" className="create-event-btn" onClick={()=>{navigate('/createEvent')}}>
                 Create Event
               </Button>

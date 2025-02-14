@@ -1,9 +1,15 @@
 "use client"
 
 import { useState } from "react"
+import axios from "axios"
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "../Style/CreateEvent.css"
 
 const CreateEvent = () => {
+
+  const navigate = useNavigate();
+
+  
   const [eventData, setEventData] = useState({
     title: "",
     description: "",
@@ -22,10 +28,27 @@ const CreateEvent = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Event Data:", eventData)
+    try {
+      const response = await axios.post("https://zero2-event-tracker-categories.onrender.com/api/createEvents", eventData)
+      console.log("Event created:", response.data)
+      // Yahan par aap user ko success message dikha sakte hain
+      alert("Event successfully created!")
+      // Form ko reset karna
+      setEventData({
+        title: "",
+        description: "",
+        date: "",
+        time: "",
+        location: "",
+        imageUrl: "",
+        price: "",
+      })
+    } catch (error) {
+      console.error("Error creating event:", error)
+      alert("Error creating event. Please try again.")
+    }
   }
 
   return (
@@ -33,9 +56,9 @@ const CreateEvent = () => {
       <h2>Create New Event</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Event Title</label>
+          <label htmlFor="title">Event Title</label>
           <input
-            type="text"
+            id="title"
             name="title"
             value={eventData.title}
             onChange={handleChange}
@@ -45,8 +68,9 @@ const CreateEvent = () => {
         </div>
 
         <div className="form-group">
-          <label>Event Description</label>
+          <label htmlFor="description">Event Description</label>
           <textarea
+            id="description"
             name="description"
             value={eventData.description}
             onChange={handleChange}
@@ -57,20 +81,20 @@ const CreateEvent = () => {
 
         <div className="form-row">
           <div className="form-group">
-            <label>Date</label>
-            <input type="date" name="date" value={eventData.date} onChange={handleChange} required />
+            <label htmlFor="date">Date</label>
+            <input id="date" type="date" name="date" value={eventData.date} onChange={handleChange} required />
           </div>
 
           <div className="form-group">
-            <label>Time</label>
-            <input type="time" name="time" value={eventData.time} onChange={handleChange} required />
+            <label htmlFor="time">Time</label>
+            <input id="time" type="time" name="time" value={eventData.time} onChange={handleChange} required />
           </div>
         </div>
 
         <div className="form-group">
-          <label>Location</label>
+          <label htmlFor="location">Location</label>
           <input
-            type="text"
+            id="location"
             name="location"
             value={eventData.location}
             onChange={handleChange}
@@ -80,8 +104,9 @@ const CreateEvent = () => {
         </div>
 
         <div className="form-group">
-          <label>Image URL</label>
+          <label htmlFor="imageUrl">Image URL</label>
           <input
+            id="imageUrl"
             type="url"
             name="imageUrl"
             value={eventData.imageUrl}
@@ -92,8 +117,9 @@ const CreateEvent = () => {
         </div>
 
         <div className="form-group">
-          <label>Price (INR)</label>
+          <label htmlFor="price">Price (INR)</label>
           <input
+            id="price"
             type="number"
             name="price"
             value={eventData.price}
@@ -103,7 +129,7 @@ const CreateEvent = () => {
           />
         </div>
 
-        <button type="submit" className="submit-btn">
+        <button type="submit" className="submit-btn" onClick={()=>{navigate('/')}}>
           Publish Event
         </button>
       </form>

@@ -10,35 +10,12 @@ import four from "../assets/Green-Day.jpg";
 import five from "../assets/Izack.avif";
 import six from "../assets/Luke.avif";
 import seven from "../assets/shawn Mendes.webp";
-import trending from "../assets/trendingEvent.avif";
-import upcoming from "../assets/upcomingEvent.webp";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Context } from "../main";
 import Nav from "../Component/Nav";  // Importing your custom Nav component
 
 const Home = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
   const navigate = useNavigate();
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    arrows: true,
-  };
-
-  const handleRedirect1 = () => {
-    navigate("/trending");
-  };
-  const handleRedirect2 = () => {
-    navigate("/upcoming");
-  };
 
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -124,26 +101,6 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="allEvents">
-        <Slider {...settings}>
-          <div className="event-img-container">
-            <img src={trending} alt="Trending Event" className="event-image" />
-            <div className="text-overlay">
-              <h3 className="subheading">THE BEST SINGERS AND MORE!</h3>
-              <h1 className="main-heading">Trending Events</h1>
-              <button className="cta-button" onClick={handleRedirect1}> →</button>
-            </div>
-          </div>
-          <div className="event-img-container">
-            <img src={upcoming} alt="Upcoming Event" className="event-image" />
-            <div className="text-overlay">
-              <h3 className="subheading">THE BEST WEDDING SINGERS AND MORE!</h3>
-              <h1 className="main-heading">Upcoming Events</h1>
-              <button className="cta-button" onClick={handleRedirect2}> →</button>
-            </div>
-          </div>
-        </Slider>
-      </div>
     </>
   );
 };

@@ -1,5 +1,4 @@
 import "../Style/Profile.css";
-import Tabs from "../Component/Tabs"; // Import the TabsComponent
 
 function Profile() {
   return (
@@ -31,8 +30,6 @@ function Profile() {
         </div>
       </div>
 
-      {/* Tabs Component */}
-      <Tabs />
     </div>
   );
 }
