@@ -1,36 +1,45 @@
-
+/* General Styles */
 .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #121212; /* Dark background */
-  color: #ffffff; /* Light text */
+  background-color: #121212;
+  color: #ffffff;
+  padding: 1rem;
 }
 
 .login-container {
   display: flex;
-  background-color: #1e1e1e; /* Darker container background */
+  background-color: #1e1e1e;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(219, 219, 219, 0.2);
-  width: 50%;
-  height: 60vh;
+  width: 90%;
+  max-width: 900px;
+  height: auto;
 }
 
+/* Video Section */
 .login-image {
   flex: 1;
+  display: none;
+  overflow-y: hidden;
+
 }
 
 .login-image video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
+  object-fit: cover;}
 
+/* Form Section */
 .login-form {
   flex: 1;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .form-title {
@@ -40,11 +49,11 @@
 
 .form-subtitle {
   font-size: 0.9rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-subtitle a {
-  color: #bb86fc; /* Light purple for links */
+  color: #bb86fc;
   text-decoration: none;
 }
 
@@ -52,8 +61,9 @@
   text-decoration: underline;
 }
 
+/* Input Fields */
 .input-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
 }
 
 .input-group label {
@@ -69,6 +79,7 @@
   border-radius: 5px;
   background-color: #333;
   color: #ffffff;
+  transition: border-color 0.3s ease;
 }
 
 .input-group input:focus {
@@ -76,17 +87,18 @@
   border-color: #bb86fc;
 }
 
+/* Options */
 .options {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  font-size: 0.9rem;
 }
 
 .options label {
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
 }
 
 .options input[type="checkbox"] {
@@ -102,6 +114,7 @@
   text-decoration: underline;
 }
 
+/* Button */
 .login-button {
   width: 100%;
   padding: 0.8rem;
@@ -111,36 +124,35 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.3s;
 }
 
 .login-button:hover {
   background-color: #9a67ea;
 }
 
-.social-login {
-  text-align: center;
-  margin-top: 2rem;
+/* Responsive Design */
+@media (min-width: 768px) {
+  .login-container {
+    flex-direction: row;
+    height: 70vh;
+  }
+  .login-image {
+    display: block;
+  }
 }
 
-.social-login p {
-  margin-bottom: 1rem;
-}
-
-.social-icons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.social-icons a {
-  color: #ffffff;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border: 1px solid #333;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.social-icons a:hover {
-  background-color: #333;
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+  .login-form {
+    padding: 1.5rem;
+  }
+  .form-title {
+    font-size: 1.8rem;
+  }
+  .login-button {
+    font-size: 0.9rem;
+  }
 }

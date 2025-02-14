@@ -4,9 +4,10 @@ import Home from "./Component/Home";
 import Login from "./Component/Login";
 import SignUp from "./Component/SignUp";
 import {Toaster} from "react-hot-toast";
-import Trending from "./Pages/TrendingPage";
-import Upcoming from "./Pages/UpcomingPage";
 import Nav from "./Component/Nav";
+import Profile from "./Pages/Profile"
+import CreateEvent from "./Pages/CreateEvent";
+import Events  from "./Pages/Events";
 
 
 function Layout() {
@@ -24,8 +25,9 @@ function Layout() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/trending" element={<Trending />} />
-          <Route path="/upcoming" element={<Upcoming />} />
+          <Route path="/profile" element={<Profile />}/>
+          <Route path="/createEvent" element={<CreateEvent />} />
+          <Route path="/events" element={<Events />} />
         </Routes>
       
       <Toaster />
