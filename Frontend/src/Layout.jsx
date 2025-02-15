@@ -8,6 +8,7 @@ import Nav from "./Component/Nav";
 import Profile from "./Pages/Profile"
 import CreateEvent from "./Pages/CreateEvent";
 import Events  from "./Pages/Events";
+import EventDetail from "./Pages/EventDetail";
 
 
 function Layout() {
@@ -28,6 +29,8 @@ function Layout() {
           <Route path="/profile" element={<Profile />}/>
           <Route path="/createEvent" element={<CreateEvent />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/event/:id" element={<EventDetail />} />
+          <Route path="/event/:id" element={<EventDetail />} />
         </Routes>
       
       <Toaster />

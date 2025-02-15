@@ -2,10 +2,12 @@ import React, { useContext, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Layout from "./Layout";
 import axios from "axios";
-import { Context, server } from "./main";
+import { AuthContext } from "../src/Context/AuthContext";
+import { server } from "./main";
+
 
 function App() {
-  const { setUser, setIsAuthenticated } = useContext(Context);
+  const { setUser, setIsAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     axios

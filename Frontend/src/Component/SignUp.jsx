@@ -2,10 +2,8 @@ import { useState, useContext } from "react";
 import "../Style/SignUp.css";
 import signUpVideo from "../assets/login-video.mp4";
 import axios from "axios";
-import { server } from "../main";
-import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { Context } from "../main";
+import { AuthContext } from "../Context/AuthContext"; // ✅ Adjusted import
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -13,7 +11,7 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Redirect to homepage if already authenticated
@@ -28,7 +26,7 @@ const SignUpPage = () => {
     try {
       // Make the API request to register the user
       const { data } = await axios.post(
-        `${server}/signUp`,
+        "https://zero1-eventtracker-userauth.onrender.com/api/v1/users/register", // ✅ Updated API route
         { name, email, password },
         { withCredentials: true }
       );
@@ -110,4 +108,3 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
-  
