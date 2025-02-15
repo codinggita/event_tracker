@@ -2,10 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import userRoutes from "./routes/userRoutes.js";
+import userRoutes from "./Routes/user.js";
+import { connectDB } from "./data/database.js";  // ✅ Import connectDB
 
 dotenv.config();
 const app = express();
+
+// ✅ Connect Database
+connectDB();  // ✅ Ensure database connection before handling requests
 
 // Middleware
 app.use(express.json());
