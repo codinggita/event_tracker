@@ -1,31 +1,19 @@
 import express from "express";
 import dotenv from "dotenv";
-import userRouter from "./Routes/user.js";
-import { connectDB } from "./data/database.js";
-import cors from "cors";
-import path from "path";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import userRoutes from "./routes/userRoutes.js";
 
-dotenv.config({ path: path.resolve('data', 'config.env') });
+dotenv.config();
 const app = express();
 
-// ✅ Fix: Proper CORS settings to allow cookies
-app.use(cors({
-  origin: "http://localhost:5173",  // ✅ Frontend URL
-  credentials: true,                 // ✅ Allow cookies to be sent
-}));
-
-// ✅ Middleware
-app.use(cookieParser());  
+// Middleware
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-// ✅ Routes
-app.use("/api/v1/users", userRouter);
+// Routes
+app.use("/api/v1/users", userRoutes);
 
-// ✅ Connect Database
-connectDB();
-
-// ✅ Start Server
-app.listen(process.env.PORT, () => {
-  console.log("Server is working on port 4000");
-});
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
