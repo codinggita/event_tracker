@@ -1,55 +1,57 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import axios from "axios"
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import "../Style/CreateEvent.css"
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "../Style/CreateEvent.css";
 
 const CreateEvent = () => {
-
   const navigate = useNavigate();
 
-  
   const [eventData, setEventData] = useState({
     title: "",
-    description: "",
+    shortDescription: "",
+    longDescription: "",
     date: "",
     time: "",
     location: "",
     imageUrl: "",
     price: "",
-  })
+  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setEventData((prevState) => ({
       ...prevState,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const response = await axios.post("https://zero2-event-tracker-categories.onrender.com/api/createEvents", eventData)
-      console.log("Event created:", response.data)
-      // Yahan par aap user ko success message dikha sakte hain
-      alert("Event successfully created!")
-      // Form ko reset karna
+      const response = await axios.post(
+        "https://zero2-event-tracker-categories.onrender.com/api/createEvents",
+        eventData
+      );
+      console.log("Event created:", response.data);
+      alert("Event successfully created!");
       setEventData({
         title: "",
-        description: "",
+        shortDescription: "",
+        longDescription: "",
         date: "",
         time: "",
         location: "",
         imageUrl: "",
         price: "",
-      })
+      });
+      navigate("/");
     } catch (error) {
-      console.error("Error creating event:", error)
-      alert("Error creating event. Please try again.")
+      console.error("Error creating event:", error);
+      alert("Error creating event. Please try again.");
     }
-  }
+  };
 
   return (
     <div className="create-event">
@@ -68,13 +70,25 @@ const CreateEvent = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="description">Event Description</label>
-          <textarea
-            id="description"
-            name="description"
-            value={eventData.description}
+          <label htmlFor="shortDescription">Short Description</label>
+          <input
+            id="shortDescription"
+            name="shortDescription"
+            value={eventData.shortDescription}
             onChange={handleChange}
-            placeholder="Enter event description"
+            placeholder="Enter a short description"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="longDescription">Detailed Description</label>
+          <textarea
+            id="longDescription"
+            name="longDescription"
+            value={eventData.longDescription}
+            onChange={handleChange}
+            placeholder="Enter full event details"
             required
           />
         </div>
@@ -129,13 +143,10 @@ const CreateEvent = () => {
           />
         </div>
 
-        <button type="submit" className="submit-btn" onClick={()=>{navigate('/')}}>
-          Publish Event
-        </button>
+        <button type="submit" className="submit-btn">Publish Event</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreateEvent
-
+export default CreateEvent;

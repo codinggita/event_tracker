@@ -1,19 +1,19 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";  // ✅ Correct way to use navigation
+import { useNavigate } from "react-router-dom";
 import "../Style/Login.css";
 import loginVideo from "../assets/login-video.mp4";
-import { Context, server } from "../main";
+import { AuthContext } from "../Context/AuthContext";  // ✅ Importing Context
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { server } from "../main";
 
 const LoginPage = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();  // ✅ useNavigate hook for navigation
+  const navigate = useNavigate();
 
-  // ✅ Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
@@ -33,8 +33,7 @@ const LoginPage = () => {
 
       toast.success("Login Successful");
       setIsAuthenticated(true);
-      navigate("/");  // ✅ Redirect after login
-
+      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "Login Failed");
     } finally {

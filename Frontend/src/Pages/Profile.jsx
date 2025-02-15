@@ -1,37 +1,56 @@
-import "../Style/Profile.css";
+import React, { useContext, useEffect } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { server } from "../main";
 
-function Profile() {
+const Profile = () => {
+  const { user, setUser, setIsAuthenticated, isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  // Fetch user data when component loads
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await axios.get(`${server}/me`, { withCredentials: true });
+        setUser(data.user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    };
+
+    if (!user) {
+      fetchUser();
+    }
+  }, [user, setUser, setIsAuthenticated]);
+
+  const logoutHandler = async () => {
+    try {
+      await axios.get(`${server}/logout`, { withCredentials: true });
+
+      setUser(null);
+      setIsAuthenticated(false);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
+
+  if (!isAuthenticated) return <h2>Please log in to view your profile.</h2>;
+  if (!user) return <h2>Loading...</h2>;
+
   return (
     <div className="profile-container">
-      <div className="profile-header">
-        <div className="avatar">
-          <div className="avatar-letter">R</div>
-          <span className="camera-icon">📷</span>
-        </div>
-
-        <h1 className="profile-name">Rijans Patel</h1>
-
-        <div className="location">
-          <span className="location-icon">📍</span>
-          Ahmedabad
-        </div>
-
-        <div className="stats">
-          <span>0 Followers</span>
-          <span className="dot">•</span>
-          <span>0 Following</span>
-        </div>
-
-        <div className="action-buttons">
-          <button className="btn edit">
-            <span className="icon">✏️</span>
-            Edit Profile
-          </button>
-        </div>
-      </div>
-
+      <h1>My Profile</h1>
+      <img src={user.profileImage || "/default-avatar.png"} alt="Profile" className="profile-img" />
+      <h2>{user.name}</h2>
+      <p>Email: {user.email}</p>
+      <button onClick={logoutHandler} className="logout-button">Logout</button>
     </div>
   );
-}
+};
 
 export default Profile;

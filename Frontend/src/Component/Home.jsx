@@ -10,11 +10,12 @@ import four from "../assets/Green-Day.jpg";
 import five from "../assets/Izack.avif";
 import six from "../assets/Luke.avif";
 import seven from "../assets/shawn Mendes.webp";
-import { Context } from "../main";
+import { AuthContext } from "../Context/AuthContext";
 import Nav from "../Component/Nav";  // Importing your custom Nav component
+import Spline from "@splinetool/react-spline";
 
 const Home = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const targetRef = useRef(null);
@@ -47,16 +48,9 @@ const Home = () => {
     <>
       <Nav /> {/* Include the Navbar here */}
       
-      <section className="video-section">
-        <video className="background-video" autoPlay loop muted>
-          <source src={myWebBannerVideo} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div className="overlay-text">
-          <h2 className="subheading">WEDDING, CORPORATE & PRIVATE ENTERTAINMENT</h2>
-          <h1 className="heading">Elevate your event.</h1>
-        </div>
-      </section>
+      {/* <section className="video-section">
+          <Spline scene="https://prod.spline.design/fenSFM78ePM9TDZp/scene.splinecode" disableAntialiasing={true} />
+      </section> */}
 
       <div className="text-container">
         <div className="header">
