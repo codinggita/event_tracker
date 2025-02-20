@@ -1,19 +1,16 @@
-"use client";
+import React, { useState } from "react";
+import api from "../services/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { server } from "../main";
+import "../Style/CreateEvent.css"; // CSS file for styling
 
-import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "../Style/CreateEvent.css";
-
-const CreateEvent = () => {
-  const navigate = useNavigate();
-
-  const [eventData, setEventData] = useState({
+const CreateEventForm = () => {
+  const [formData, setFormData] = useState({
     title: "",
     shortDescription: "",
     longDescription: "",
     date: "",
-    time: "",
     location: "",
     imageUrl: "",
     price: "",
@@ -21,132 +18,177 @@ const CreateEvent = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEventData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://zero2-event-tracker-categories.onrender.com/api/createEvents",
-        eventData
-      );
-      console.log("Event created:", response.data);
-      alert("Event successfully created!");
-      setEventData({
-        title: "",
-        shortDescription: "",
-        longDescription: "",
-        date: "",
-        time: "",
-        location: "",
-        imageUrl: "",
-        price: "",
-      });
-      navigate("/");
+      const response = await api.post(`${server}createEvent`, formData);
+      if (response.status === 201) {
+        toast.success("Event created successfully!");
+        setFormData({
+          title: "",
+          shortDescription: "",
+          longDescription: "",
+          date: "",
+          location: "",
+          imageUrl: "",
+          price: "",
+        });
+      }
     } catch (error) {
       console.error("Error creating event:", error);
-      alert("Error creating event. Please try again.");
+      if (error.response?.status === 401) {
+        toast.error("Please login first");
+        window.location.href = "/login";
+      } else {
+        toast.error("Failed to create event. Try again!");
+      }
     }
   };
 
   return (
-    <div className="create-event">
-      <h2>Create New Event</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="title">Event Title</label>
-          <input
-            id="title"
-            name="title"
-            value={eventData.title}
-            onChange={handleChange}
-            placeholder="Enter event title"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="shortDescription">Short Description</label>
-          <input
-            id="shortDescription"
-            name="shortDescription"
-            value={eventData.shortDescription}
-            onChange={handleChange}
-            placeholder="Enter a short description"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="longDescription">Detailed Description</label>
-          <textarea
-            id="longDescription"
-            name="longDescription"
-            value={eventData.longDescription}
-            onChange={handleChange}
-            placeholder="Enter full event details"
-            required
-          />
-        </div>
-
-        <div className="form-row">
+    <div className="create-event-container">
+      <ToastContainer theme="dark" />
+      <div className="form-card">
+        <h2 className="form-title">Create New Event</h2>
+        <form onSubmit={handleSubmit} className="animate-form">
+          {/* Event Title */}
           <div className="form-group">
-            <label htmlFor="date">Date</label>
-            <input id="date" type="date" name="date" value={eventData.date} onChange={handleChange} required />
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+              className="form-input"
+              placeholder=" " // Required for label animation
+            />
+            <label htmlFor="title" className="form-label">
+              Event Title
+            </label>
+            <span className="focus-border"></span>
           </div>
 
+          {/* Short Description */}
           <div className="form-group">
-            <label htmlFor="time">Time</label>
-            <input id="time" type="time" name="time" value={eventData.time} onChange={handleChange} required />
+            <input
+              type="text"
+              id="shortDescription"
+              name="shortDescription"
+              value={formData.shortDescription}
+              onChange={handleChange}
+              required
+              className="form-input"
+              placeholder=" " // Required for label animation
+            />
+            <label htmlFor="shortDescription" className="form-label">
+              Short Description
+            </label>
+            <span className="focus-border"></span>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="location">Location</label>
-          <input
-            id="location"
-            name="location"
-            value={eventData.location}
-            onChange={handleChange}
-            placeholder="Enter event location"
-            required
-          />
-        </div>
+          {/* Long Description */}
+          <div className="form-group">
+            <textarea
+              id="longDescription"
+              name="longDescription"
+              value={formData.longDescription}
+              onChange={handleChange}
+              required
+              className="form-input textarea"
+              placeholder=" " // Required for label animation
+            ></textarea>
+            <label htmlFor="longDescription" className="form-label">
+              Long Description
+            </label>
+            <span className="focus-border"></span>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="imageUrl">Image URL</label>
-          <input
-            id="imageUrl"
-            type="url"
-            name="imageUrl"
-            value={eventData.imageUrl}
-            onChange={handleChange}
-            placeholder="Enter image URL"
-            required
-          />
-        </div>
+          {/* Date and Price */}
+          <div className="form-row">
+            <div className="form-group half">
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+                className="form-input"
+                placeholder=" " // Required for label animation
+              />
+              <label htmlFor="date" className="form-label">
+                Event Date
+              </label>
+              <span className="focus-border"></span>
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="price">Price (INR)</label>
-          <input
-            id="price"
-            type="number"
-            name="price"
-            value={eventData.price}
-            onChange={handleChange}
-            placeholder="Enter ticket price"
-            required
-          />
-        </div>
+            <div className="form-group half">
+              <input
+                type="number"
+                id="price"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                required
+                className="form-input"
+                placeholder=" " // Required for label animation
+              />
+              <label htmlFor="price" className="form-label">
+                Price
+              </label>
+              <span className="focus-border"></span>
+            </div>
+          </div>
 
-        <button type="submit" className="submit-btn">Publish Event</button>
-      </form>
+          {/* Location */}
+          <div className="form-group">
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              required
+              className="form-input"
+              placeholder=" " // Required for label animation
+            />
+            <label htmlFor="location" className="form-label">
+              Location
+            </label>
+            <span className="focus-border"></span>
+          </div>
+
+          {/* Image URL */}
+          <div className="form-group">
+            <input
+              type="text"
+              id="imageUrl"
+              name="imageUrl"
+              value={formData.imageUrl}
+              onChange={handleChange}
+              required
+              className="form-input"
+              placeholder=" " // Required for label animation
+            />
+            <label htmlFor="imageUrl" className="form-label">
+              Image URL
+            </label>
+            <span className="focus-border"></span>
+          </div>
+
+          {/* Submit Button */}
+          <button type="submit" className="submit-btn">
+            <span>Create Event</span>
+            <div className="btn-glow"></div>
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default CreateEvent;
+export default CreateEventForm;
