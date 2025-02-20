@@ -2,7 +2,6 @@ import { useContext, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import "../Style/Home.css";
-import myWebBannerVideo from "../assets/myWeb-banner video.mp4";  // Importing the video
 import one from "../assets/arjit.webp";
 import two from "../assets/Dj West.avif";
 import three from "../assets/Ed sheeran.jpg";
@@ -10,13 +9,10 @@ import four from "../assets/Green-Day.jpg";
 import five from "../assets/Izack.avif";
 import six from "../assets/Luke.avif";
 import seven from "../assets/shawn Mendes.webp";
-import { AuthContext } from "../Context/AuthContext";
 import Nav from "../Component/Nav";  // Importing your custom Nav component
-import Spline from "@splinetool/react-spline";
+import Banner from "../Component/Banner";
 
 const Home = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -24,7 +20,7 @@ const Home = () => {
     offset: ["start end", "end start"],
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-55%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-45%"]);
 
   const [navbar, setNavbar] = useState(false);
 
@@ -47,11 +43,7 @@ const Home = () => {
   return (
     <>
       <Nav /> {/* Include the Navbar here */}
-      
-      {/* <section className="video-section">
-          <Spline scene="https://prod.spline.design/fenSFM78ePM9TDZp/scene.splinecode" disableAntialiasing={true} />
-      </section> */}
-
+     <Banner />
       <div className="text-container">
         <div className="header">
           <p>BOUTIQUE ENTERTAINMENT</p>

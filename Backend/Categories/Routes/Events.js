@@ -1,15 +1,13 @@
 import express from "express";
-import { createEvents, showEvents, getEventDetails } from '../Controllers/Events.js';
+import { createEvent, allEvents, yourEvents, editEvent, deleteEvent } from "../Controllers/Events.js";
+import { checkAuth } from "../middleware/auth.js";  // ✅ Middleware Import
 
 const router = express.Router();
 
-// ✅ Route to create event
-router.post("/createEvents", createEvents);
-  
-// ✅ Route to fetch all events
-router.get("/showEvents", showEvents);
-
-// ✅ Route to fetch single event details
-router.get("/event/:id", getEventDetails);
+router.post("/createEvent", checkAuth, createEvent); // ✅ Only Authenticated Users
+router.get("/allEvents", allEvents); // ✅ Public Access
+router.get("/yourEvents", checkAuth, yourEvents);
+router.put("/:id", checkAuth, editEvent);
+router.delete("/:id", checkAuth, deleteEvent);
 
 export default router;

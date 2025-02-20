@@ -8,14 +8,10 @@ const eventSchema = new mongoose.Schema({
   date: { type: String, required: true },
   location: { type: String, required: true },
   price: { type: Number, required: true },
-  host: {   // ✅ Host (User) Information
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    name: { type: String, required: true },
-    profilePic: { type: String, default: "https://via.placeholder.com/150" }
-  }
+  createdBy: { type: String, required: true }, // Firebase UID
+  createdByEmail: { type: String, required: true }, // Email ID
 });
 
-
-const Event = mongoose.model("EventCard", eventSchema);
+const Event = mongoose.model("Event", eventSchema);
 
 export default Event;
