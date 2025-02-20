@@ -1,98 +1,89 @@
-"use client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaBars, FaCircleUser } from "react-icons/fa6";
-import { Search } from "lucide-react";
-import { Menu, MenuItem, IconButton, Avatar, Button } from "@mui/material";
-import { AuthContext } from "../Context/AuthContext"; // ✅ Corrected import
-import axios from "axios";
-import toast from "react-hot-toast";
+import { FaBars } from "react-icons/fa6";
+import { Compass } from "lucide-react";
+import { auth } from "../Component/firebase"; // Import Firebase auth
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import "../Style/Nav.css";
 
 export default function Navbar() {
-  const [showSearch, setShowSearch] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [user, setUser] = useState(null); // Firebase user state
   const navigate = useNavigate();
-  const open = Boolean(anchorEl);
-
-  const logOutHandler = async () => {
-    setLoading(true);
-    try {
-      await axios.get("https://zero1-eventtracker-userauth.onrender.com/api/v1/users/logout", { withCredentials: true });
-      toast.success("Logout Successful");
-      setIsAuthenticated(false);
-      navigate("/");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Logout Failed");
-      setIsAuthenticated(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+  let lastScrollY = window.scrollY;
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
-        setIsScrolled(true);
-        setShowSearch(true);
+      if (window.scrollY < lastScrollY) {
+        setIsVisible(true);
       } else {
-        setIsScrolled(false);
-        setShowSearch(false);
+        setIsVisible(false);
       }
+      setIsScrolled(window.scrollY > 50);
+      lastScrollY = window.scrollY;
     };
-  
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Listen for Firebase authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Logout function
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/");
+  };
+
   return (
-    <header className={`navbar-header ${isScrolled ? "navbar-scrolled" : ""}`}>
+    <header
+      className={`navbar-header ${isScrolled ? "navbar-scrolled" : ""} ${
+        isVisible ? "navbar-visible" : "navbar-hidden"
+      }`}
+    >
       <nav className="navbar">
         <div className="navbar-left">
-          <Link to="/" className="navbar-brand">EventTracker</Link>
-          {showSearch && (
-            <div className="search-container">
-              <div className="search-wrapper">
-                <Search className="search-icon" />
-                <input type="text" placeholder="Search events..." className="search-input" />
-              </div>
-            </div>
-          )}
+          <Link to="/" className="navbar-brand">
+            <Compass className="logo-icon" />
+            <span className="logo-text">EventTracker</span>
+          </Link>
         </div>
+
         <div className="navbar-right">
-          {isAuthenticated ? (
+          {user ? (
             <div className="auth-buttons">
-              <Button variant="outlined" className="create-event-btn" onClick={() => navigate("/events")}>
+              <button className="nav-button events-btn" onClick={() => navigate("/events")}>
                 Events
-              </Button>
-              <Button variant="outlined" className="create-event-btn" onClick={() => navigate("/createEvent")}>
-                Create Event
-              </Button>
-              <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} className="user-icon-btn">
-                <Avatar>R</Avatar>
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={() => setAnchorEl(null)}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
-              >
-                <MenuItem onClick={() => { setAnchorEl(null); navigate("/profile"); }}>Profile</MenuItem>
-                <MenuItem onClick={() => setAnchorEl(null)}>Settings</MenuItem>
-                <MenuItem onClick={() => { setAnchorEl(null); logOutHandler(); }}>Logout</MenuItem>
-              </Menu>
+              </button>
+              <button className="nav-button logout-btn" onClick={handleLogout}>
+                Log Out
+              </button>
+              <div className="avatar-container">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5F6_OcqlG2OXpJE4z0MIvFHloB-J5K1pwbA&s"
+                  alt="User Avatar"
+                  className="user-avatar"
+                  onClick={() => navigate("/profile")}
+                />
+                <div className="avatar-ring"></div>
+              </div>
             </div>
           ) : (
             <div className="auth-buttons">
-              <Link to="/login" className="login-btn">
-                <FaCircleUser className="login-icon" />
-                <span>Log in</span>
-              </Link>
-              <button className="menu-btn"><FaBars /></button>
+              <button className="nav-button login-btn" onClick={() => navigate("/login")}>
+                Log In
+              </button>
+              <button className="menu-btn">
+                <FaBars />
+              </button>
             </div>
           )}
         </div>

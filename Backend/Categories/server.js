@@ -1,24 +1,21 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import eventRoutes from "./Routes/Events.js"; // ✅ Default Import
-import {connectDB} from "./data/database.js"
-import cors from "cors"; // Corrected import
-import path from 'path';
+import express from "express";
+import dotenv from "dotenv";
+import eventRoutes from "./Routes/Events.js";
+import { connectDB } from "./data/database.js";
+import cors from "cors";
+import path from "path";
 
+// ✅ Load ENV Config
 dotenv.config();
 dotenv.config({ path: path.resolve('data', 'config.env') });
-const app = express();
 
-// Middleware to parse JSON bodies
-app.use(cors()); // Enable CORS
+const app = express();
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 
-connectDB(); // Connect to the database
+connectDB();
+app.use("/api", eventRoutes);
 
-// Use event routes for API
-app.use('/api', eventRoutes);
-
-// Start the server
 app.listen(process.env.PORT, () => {
-  console.log('Server running on port 5000');
+  console.log(`Server running on port ${process.env.PORT}`);
 });

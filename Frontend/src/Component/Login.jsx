@@ -1,96 +1,77 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "../Style/Login.css";
-import loginVideo from "../assets/login-video.mp4";
-import { AuthContext } from "../Context/AuthContext";  // ✅ Importing Context
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import { server } from "../main";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
+import { auth } from "./firebase";
+import { toast } from "react-toastify";
+import "../Style/Auth.css"
 
-const LoginPage = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate]);
-
-  const submitHandler = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
+    
     try {
-      const { data } = await axios.post(
-        `${server}/signIn`,
-        { email, password },
-        { withCredentials: true }
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken(true);
+      localStorage.setItem("authToken", token);
+      
+      // Set up token refresh
+      setInterval(async () => {
+        const user = auth.currentUser;
+        if (user) {
+          const newToken = await user.getIdToken(true);
+          localStorage.setItem("authToken", newToken);
+        }
+      }, 10 * 60 * 1000); // Refresh every 10 minutes
 
-      toast.success("Login Successful");
-      setIsAuthenticated(true);
-      navigate("/");
+      toast.success("User logged in Successfully", { position: "top-center" });
+      window.location.href = "/";
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login Failed");
-    } finally {
-      setLoading(false);
+      console.error("Login Error:", error.message);
+      toast.error(error.message, { position: "bottom-center" });
     }
   };
+  
 
   return (
-    <div className="login-page dark-theme">
-      <div className="login-container">
-        <div className="login-image">
-          <video src={loginVideo} autoPlay muted loop />
-        </div>
-        <div className="login-form">
-          <h2 className="form-title">Sign in</h2>
-          <p className="form-subtitle">
-            If you don’t have an account, register <a href="/SignUp">here</a>!
-          </p>
-          <form onSubmit={submitHandler}>
-            <div className="input-group">
-              <label htmlFor="email">Email</label>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                id="email"
-                placeholder="Enter your email address"
-                required
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="password">Password</label>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-            <div className="options">
-              <label>
-                <input type="checkbox" /> Remember me
-              </label>
-              <a href="/forgot-password" className="forgot-password">
-                Forgot Password?
-              </a>
-            </div>
-            <button type="submit" className="login-button" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-};
+    <form onSubmit={handleSubmit}>
+      <h3>Login</h3>
 
-export default LoginPage;
+      <div className="mb-3">
+        <label>Email address</label>
+        <input
+          type="email"
+          className="form-control"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="mb-3">
+        <label>Password</label>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="d-grid">
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </div>
+      <p className="forgot-password text-right">
+        New user? <a href="/register">Register Here</a>
+      </p>
+    </form>
+  );
+}
+
+export default Login;

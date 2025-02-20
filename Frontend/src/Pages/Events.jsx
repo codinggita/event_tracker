@@ -1,56 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import "../Style/Events.css";
-import { useNavigate } from 'react-router-dom';
-import { FaRegBookmark, FaStar } from "react-icons/fa";
+"use client"
+
+import { useState, useEffect } from "react"
+import axios from "axios"
+import { FaClock, FaMapMarkerAlt, FaUsers } from "react-icons/fa"
+import "../Style/Events.css"
+import { server } from "../main"
 
 const Events = () => {
-  const [events, setEvents] = useState([]);
-  const navigate = useNavigate();
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get("https://zero2-event-tracker-categories.onrender.com/api/showEvents");
-        setEvents(response.data);
+        const response = await axios.get(`${server}/allEvents`)
+        setEvents(response.data)
       } catch (error) {
-        console.error("Error fetching events", error);
+        console.error("Error fetching events:", error)
       }
-    };
+    }
 
-    fetchEvents();
-  }, []);
+    fetchEvents()
+  }, [])
 
   return (
     <div className="events-container">
-      <h1 className='p'>Events</h1>
-      <div className='events-grid'>
+      <h1 className="events-title">Events</h1>
+      <div className="events-list">
         {events.map((event) => (
           <div key={event._id} className="event-card">
-            <div className="event-image-container">
-              <img src={event.imageUrl || "/placeholder.svg"} alt={event.title} className="event-image" />
-              <FaRegBookmark className="bookmark-icon" />
+            {/* Event Time & Status */}
+  <div className="leftSide">
+  <div className="event-header">
+              <FaClock className="clock-icon" />
+              <span className="event-time">{event.time}</span>
+              <span className="status-badge">Going</span>
             </div>
-            <div className="event-details">
-              <h2>{event.title}</h2>
-              <p>{event.shortDescription}</p>
-              <p className="event-location">{event.location}</p>
-              <p className="event-date-time">📅 {event.date}</p>
-              <div className="event-footer">
-                <div className="event-interest">
-                  <FaStar className="star-icon" /> 170 Interested
-                </div>
-                <p className="event-price">💰 INR {event.price}</p>
-              </div>
 
-              <button onClick={() => navigate(`/event/${event._id}`)}>View Details</button>
+            {/* Event Title & Description */}
+            <h2 className="event-title">{event.title}</h2>
+            <p className="event-description">{event.shortDescription}</p>
+
+            {/* Creator & Location */}
+            <div className="event-details">
+              <span className="event-creator">
+                <FaUsers className="icon" /> by {event.createdByEmail|| "Unknown User"}
+              </span>
+              <span className="event-location">
+                <FaMapMarkerAlt className="icon" /> {event.location}
+              </span>
             </div>
+
+            {/* Manage Button */}
+            <button className="manage-button">View</button>
+  </div>
+
+          <div className="rightSide">
+              {/* Event Image */}
+              <div className="event-image-container">
+              <img src={event.imageUrl} alt={event.title} className="event-image" />
+            </div>
+          </div>
+
           </div>
         ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default Events;
+export default Events
