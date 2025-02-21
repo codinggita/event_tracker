@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import api from "../services/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { server } from "../main";
 import "../Style/CreateEvent.css"; // CSS file for styling
 
 const CreateEventForm = () => {
@@ -24,7 +23,7 @@ const CreateEventForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`${server}createEvent`, formData);
+      const response = await api.post("createEvent", formData);
       if (response.status === 201) {
         toast.success("Event created successfully!");
         setFormData({
