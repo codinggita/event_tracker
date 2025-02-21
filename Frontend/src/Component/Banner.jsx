@@ -47,6 +47,15 @@ const Banner = () => {
       toast.warn("Please log in to create an event!", { position: "top-center", autoClose: 3000 });
     }
   };
+
+  const handleExploreEvents = () => {
+    const auth = getAuth();
+    if (auth.currentUser) {
+      navigate("/events");
+    } else {
+      toast.warn("Please log in to explore an event!", { position: "top-center", autoClose: 3000 });
+    }
+  };
   
 
   const formattedText = text.split('\n').map((line, index) => (
@@ -68,7 +77,7 @@ const Banner = () => {
         <p className="subtitle">Where Every Event Tells a Story</p>
         
         <div className="button-container">
-          <button className="banner-button explore" onClick={()=> {navigate("/events")}}>
+          <button className="banner-button explore" onClick={handleExploreEvents}>
             <span className="button-text">
               <Compass size={24} />
               Discover Events
