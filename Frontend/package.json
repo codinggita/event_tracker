@@ -13,6 +13,7 @@
         "@auth0/auth0-react": "^2.3.0",
         "@cloudinary/react": "^1.13.1",
         "@cloudinary/url-gen": "^1.21.0",
+        "@emailjs/browser": "^4.4.1",
         "@mui/material": "^6.4.3",
         "@shadcn/ui": "^0.0.4",
         "@splinetool/react-spline": "^4.0.0",
