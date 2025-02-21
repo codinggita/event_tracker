@@ -68,7 +68,7 @@ const Banner = () => {
         <p className="subtitle">Where Every Event Tells a Story</p>
         
         <div className="button-container">
-          <button className="banner-button explore">
+          <button className="banner-button explore" onClick={()=> {navigate("/events")}}>
             <span className="button-text">
               <Compass size={24} />
               Discover Events
