@@ -61,7 +61,7 @@ const Events = () => {
                   >
                     View Details
                   </button>
-                  <button className="manage-button">Manage</button>
+                  <button onClick={() => navigate(`/manage/${event._id}`)}>Manage</button>
                 </div>
               </div>
               <div className="rightSide">
