@@ -1,7 +1,4 @@
-import express from "express";
 import Event from "../Models/EventCard.js";
-
-const router = express.Router();
 
 // ✅ Create Event
 export const createEvent = async (req, res) => {
@@ -74,4 +71,15 @@ export const deleteEvent = async (req, res) => {
   res.json({ message: "Event Deleted" });
 };
 
-
+export const eventDetailPage = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    res.json(event);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+}

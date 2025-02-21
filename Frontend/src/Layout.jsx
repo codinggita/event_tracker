@@ -22,7 +22,7 @@ function Layout() {
         <Route path="/register" element={<Register />} />  {/* ✅ Fix: Added Register Route */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/events" element={<Events />} />
-        <Route path="/event/:id" element={<EventDetail />} />
+        <Route path="/eventDetail/:id" element={<EventDetail />} />
         <Route path="/createEvent" element={<CreateEvent />} />
       </Routes>
     </>
