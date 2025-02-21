@@ -73,3 +73,5 @@ export const deleteEvent = async (req, res) => {
   await event.deleteOne();
   res.json({ message: "Event Deleted" });
 };
+
+
