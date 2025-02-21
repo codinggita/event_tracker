@@ -9,7 +9,7 @@ admin.initializeApp({
 export const checkAuth = async (req, res, next) => {
   const token = req.headers.authorization?.split("Bearer ")[1];
   
-  console.log("📢 Received Token from Frontend:", token); // ✅ Debugging
+  // console.log("📢 Received Token from Frontend:", token); // ✅ Debugging
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
@@ -17,7 +17,7 @@ export const checkAuth = async (req, res, next) => {
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
-    console.log("✅ Decoded Token:", decodedToken); // ✅ Debugging
+    // console.log("✅ Decoded Token:", decodedToken); // ✅ Debugging
     req.user = decodedToken;
     next();
   } catch (error) {
