@@ -37,12 +37,6 @@ export default function Navbar() {
     return () => unsubscribe();
   }, []);
 
-  // Logout function
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/");
-  };
-
   return (
     <header
       className={`navbar-header ${isScrolled ? "navbar-scrolled" : ""} ${
@@ -62,9 +56,6 @@ export default function Navbar() {
             <div className="auth-buttons">
               <button className="nav-button events-btn" onClick={() => navigate("/events")}>
                 Events
-              </button>
-              <button className="nav-button logout-btn" onClick={handleLogout}>
-                Log Out
               </button>
               <div className="avatar-container">
                 <img
