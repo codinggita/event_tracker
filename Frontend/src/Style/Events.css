@@ -1,57 +1,69 @@
+/* Base styles */
 .events-container {
   padding: 2rem;
-  background: #1a1b1b;
+  background: #121212;
   min-height: 100vh;
 }
 
 .events-title {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: white;
-  margin-top: 4rem;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6c63ff, #21f6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleFade 0.8s ease-out;
+}
+
+@keyframes titleFade {
+  from { 
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .events-list {
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .event-card {
   display: flex;
-  gap: 2rem; /* Add gap between left and right sides */
-  width: 100%;
-  max-width: 900px; /* Adjust max-width as needed */
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 24px;
-  position: relative;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 20px auto; /* Center the card */
+  background: rgba(30, 30, 30, 0.6);
+  border-radius: 24px;
   overflow: hidden;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .event-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, 
-    rgba(33, 246, 255, 0.1),
-    rgba(255, 49, 244, 0.1));
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(108, 99, 255, 0.1),
+    rgba(33, 246, 255, 0.1)
+  );
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
 }
 
 .event-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 30px rgba(33, 246, 255, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(108, 99, 255, 0.3);
 }
 
 .event-card:hover::before {
@@ -59,52 +71,67 @@
 }
 
 .leftSide {
-  flex: 2; /* Takes 2/3 of the available space */
+  flex: 2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 .rightSide {
-  flex: 1; /* Takes 1/3 of the available space */
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 
 .event-header {
   display: flex;
-  margin-bottom: 1.5rem;
   align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .clock-icon {
-  color: #00ff9d;
-  font-size: 1.1rem;
-}
-
-.event-time {
-  color: #00ff9d;
+  color: #6c63ff;
   font-size: 1.2rem;
 }
 
-.status-badge {
-  margin-left: 1.4em;
-  background: #00ff9d;
-  color: #000;
-  padding: 0.25rem 1rem;
-  border-radius: 20px;
-  font-size: 0.845rem;
+.event-time {
+  color: #6c63ff;
+  font-size: 1rem;
   font-weight: 500;
 }
 
-.event-title {
-  font-size: 2.5rem;
+.status-badge {
+  margin-left: auto;
+  background: linear-gradient(135deg, #6c63ff, #21f6ff);
+  color: #fff;
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: white;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+}
+
+.event-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
   margin-bottom: 1rem;
-  line-height: 1.2;
+  line-height: 1.3;
+  background: linear-gradient(135deg, #fff, #21f6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .event-description {
-  color: #c9c8c8;
+  color: #b0b0b0;
   font-size: 1.1rem;
+  line-height: 1.6;
   margin-bottom: 2rem;
-  line-height: 1.5;
+  flex-grow: 1;
 }
 
 .event-details {
@@ -119,59 +146,73 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #bfbfbf;
-  font-size: 1rem;
+  color: #888;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.event-creator:hover,
+.event-location:hover {
+  color: #6c63ff;
 }
 
 .icon {
-  color: #808080;
+  color: #6c63ff;
   font-size: 1.1rem;
 }
 
 .event-image-container {
-  width: 100%;
   height: 100%;
-  border-radius: 16px;
+  width: 100%;
+  position: relative;
   overflow: hidden;
-  background: #2a2a2a;
 }
 
 .event-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.event-image:hover {
-  transform: scale(1.05);
+.event-card:hover .event-image {
+  transform: scale(1.1);
 }
 
 .manage-button {
-  background: #2a2a2a;
-  color: white;
+  background: linear-gradient(135deg, #6c63ff, #21f6ff);
+  color: #fff;
   border: none;
-  padding: 0.75rem 2rem;
+  padding: 0.8rem 2rem;
   border-radius: 12px;
   font-size: 1rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  width: fit-content;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
+  width: fit-content;
 }
 
 .manage-button:hover {
-  background: #333;
-  cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108, 99, 255, 0.3);
 }
 
 @media (max-width: 1024px) {
-  .event-card {
-    flex-direction: column; /* Stack left and right sides vertically on smaller screens */
+  .events-container {
+    padding: 1.5rem;
   }
 
-  .event-image-container {
+  .event-card {
+    flex-direction: column;
+  }
+
+  .rightSide {
     height: 300px;
+  }
+
+  .event-title {
+    font-size: 1.75rem;
   }
 }
 
@@ -180,18 +221,33 @@
     padding: 1rem;
   }
 
+  .events-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
   .event-card {
+    border-radius: 16px;
+  }
+
+  .leftSide {
     padding: 1.5rem;
   }
 
-  .event-title {
-    font-size: 1.75rem;
-  background: linear-gradient(90deg, #fff, #21f6ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .rightSide {
+    height: 200px;
   }
 
-  .event-image-container {
-    height: 200px;
+  .event-title {
+    font-size: 1.5rem;
+  }
+
+  .event-description {
+    font-size: 1rem;
+  }
+
+  .manage-button {
+    width: 100%;
+    text-align: center;
   }
 }
