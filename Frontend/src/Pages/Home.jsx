@@ -12,6 +12,7 @@ import seven from "../assets/shawn Mendes.webp";
 import Nav from "../Component/Nav";  // Importing your custom Nav component
 import Banner from "../Component/Banner";
 
+
 const Home = () => {
 
   const targetRef = useRef(null);
@@ -72,6 +73,7 @@ const Home = () => {
         </div>
       </div>
 
+
       <div className="carousel">
         <div className="artist">
           <h1>Artists on tour near Ahmedabad</h1>
@@ -87,6 +89,7 @@ const Home = () => {
         </div>
       </div>
 
+  
     </>
   );
 };
