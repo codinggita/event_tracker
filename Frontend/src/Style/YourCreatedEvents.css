@@ -1,181 +1,270 @@
-.events-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: #1a1b1b;
+
+/* Events Container (Pinkish Background) */
+.your-event-container {
+  padding: 0px;
+  background-color: #14141422; /* Pinkish background as in the image */
   min-height: 100vh;
+  color: #ffffff;
 }
 
-.events-title {
-  font-size: 2.5rem;
-  color: #2d3748;
-  margin-bottom: 2rem;
-  font-weight: 700;
+/* Events Title */
+.your-event-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 30px;
   text-align: center;
-  color: white;
+  font-family: 'Arial', sans-serif;
 }
 
-.events-grid {
+/* Events List (Grid Layout for Two Cards Per Row) */
+.your-event-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr); /* Two columns on desktop */
+  gap: 30px; /* Increased gap for better spacing */
+  max-width: 1600px; /* Limit the overall width of the grid */
+  margin: 0 auto; /* Center the grid horizontally */
 }
 
-.event-card {
-  display: flex;
-  background: #2a2a2a;
-  border-radius: 16px;
+/* Event Card */
+.your-event-card {
+  background-color: #1a1a1a; /* Dark background for cards */
+  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
+  width: 100%; /* Ensure full width within the grid column */
+  max-width: 1000px; /* Increased max-width for larger cards */
+  animation: your-event-fadeIn 0.8s ease-in-out; /* Fade-in animation for cards */
+  border-left: 5px solid #c175c9; /* Cyan border on left, matching image */
 }
 
-.event-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+/* Animation for fade-in */
+@keyframes your-event-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.leftSide {
+/* Event Content (Vertical Layout) */
+.your-event-content {
+  display: flex;
+  flex-direction: row; /* Vertical layout */
+  gap: 20px; /* Space between info and image */
+}
+
+/* Event Info (Left Side with Cyan Border) */
+.your-event-info {
   flex: 1;
-  padding: 1.5rem;
+  padding: 20px;
+  background-color: #1a1a1a;
+  border-radius: 10px 0 0 10px; /* Rounded corners on left side */
+}
+
+/* Event Header */
+.your-event-header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-.rightSide {
-  width: 280px;
-  position: relative;
-  overflow: hidden;
+/* Event Icons */
+.your-event-icon {
+  font-size: 18px;
 }
 
-.event-image {
+/* Event Time */
+.your-event-time {
+  font-size: 16px;
+  color: #ffffff;
+  margin-right: 10px;
+}
+
+/* Status Badge (Purple as in the image) */
+.your-event-status-badge {
+  background-color: #c175c9; /* Purple for "Going" badge */
+  color: #1a1a1a;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Event Title */
+.your-event-title-text {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Event Description */
+.your-event-description {
+  font-size: 16px;
+  color: #b0b0b0;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+/* Event Details */
+.your-event-details {
+  margin-bottom: 20px;
+}
+
+.your-event-creator,
+.your-event-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #b0b0b0;
+  margin-bottom: 8px;
+}
+
+/* Button Group */
+.your-event-button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* View Detail Button (Cyan as in the image) */
+.your-event-view-detail-button {
+  background-color: #c175c9; /* Cyan for button */
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Animation for button hover */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: 1; /* Ensure buttons take equal width in the group */
+}
+
+.your-event-view-detail-button:hover {
+  background-color: #00b3d1; /* Slightly darker cyan on hover */
+  transform: scale(1.05); /* Slight scale on hover for interactivity */
+}
+
+/* Manage Button (Cyan as in the image, matching View Details) */
+.your-event-manage-button {
+  background-color: #c175c9; /* Cyan for button, matching View Details */
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Animation for button hover */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: 1; /* Ensure buttons take equal width in the group */
+}
+
+.your-event-manage-button:hover {
+  background-color: #00b3d1; /* Slightly darker cyan on hover */
+  transform: scale(1.05); /* Slight scale on hover for interactivity */
+}
+
+/* Event Image Container (Right Side) */
+.your-event-image-container {
+  flex: 1;
+  max-width: 100%; /* Full width for vertical layout */
+  height: 300px; /* Fixed height for consistent sizing */
+  overflow: hidden; /* Prevent overflow */
+  border-radius: 0 10px 10px 0; /* Rounded corners on right side */
+}
+
+.your-event-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  object-fit: cover; /* Maintain aspect ratio without stretching or overflowing */
+  border-radius: 0 10px 10px 0; /* Match container rounding */
+  transition: transform 0.3s ease; /* Animation for image hover */
 }
 
-.event-card:hover .event-image {
-  transform: scale(1.05);
+.your-event-image:hover {
+  transform: scale(1.05); /* Slight zoom on hover for interactivity */
 }
 
-.event-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.clock-icon {
-  color: #00ff9d;
-}
-
-.event-time {
-  color: #00ff9d;
-  font-size: 0.9rem;
-}
-
-.status-badge {
-  background: #00ff9d;
-  color: black;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-left: auto;
-}
-
-.event-title {
-  font-size: 1.5rem;
-  color: white;
-  margin-bottom: 0.75rem;
-  font-weight: 700;
-}
-
-.event-description {
-  color: #a0aec0;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-  flex-grow: 1;
-}
-
-.event-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.event-creator,
-.event-location {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #a0aec0;
-  font-size: 0.9rem;
-}
-
-.icon {
-  color: #00ff9d;
-}
-
-.button-group {
-  display: flex;
-  gap: 1rem;
-}
-
-.view-button,
-.manage-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  flex: 1;
-}
-
-.view-button {
-  background: #00ff9d;
-  color: black;
-}
-
-.view-button:hover {
-  background: #00cc7d;
-}
-
-.manage-button {
-  background: #4a5568;
-  color: white;
-}
-
-.manage-button:hover {
-  background: #2d3748;
-}
-
-.no-events-message {
+/* No Events Message */
+.your-event-no-events {
   text-align: center;
   color: #a0aec0;
   font-size: 1.1rem;
-  grid-column: 1 / -1;
+  grid-column: 1 / -1; /* Span across all columns */
   padding: 2rem;
   background: #2a2a2a;
   border-radius: 8px;
   border: 2px dashed #4a5568;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
-  .events-grid {
-    grid-template-columns: 1fr;
+  .your-event-container {
+    padding: 20px;
   }
 
-  .event-card {
-    flex-direction: column;
+  .your-event-list {
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: 20px;
   }
 
-  .rightSide {
-    width: 100%;
-    height: 200px;
+  .your-event-card {
+    max-width: 100%; /* Full width on mobile */
+  }
+
+  .your-event-content {
+    flex-direction: column; /* Already vertical, no change needed */
+    padding: 15px;
+  }
+
+  .your-event-info {
+    padding: 15px;
+    border-left: none;
+    border-top: 5px solid #c175c9; /* Cyan border on top for mobile */
+    border-radius: 10px 10px 0 0; /* Adjust rounding for mobile */
+  }
+
+  .your-event-image-container {
+    max-width: 100%;
+    height: 200px; /* Smaller height on mobile */
+    margin-top: 15px;
+    border-radius: 0 0 10px 10px; /* Adjust rounding for mobile */
+  }
+
+  .your-event-title-text {
+    font-size: 20px;
+  }
+
+  .your-event-description {
+    font-size: 14px;
+  }
+
+  .your-event-view-detail-button,
+  .your-event-manage-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    flex: none; /* Remove flex grow on mobile for better fit */
+  }
+
+  .your-event-button-group {
+    flex-direction: column; /* Stack buttons vertically on mobile */
+    gap: 0.5rem;
   }
 }

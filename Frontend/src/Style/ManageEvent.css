@@ -1,104 +1,191 @@
-/* 🔹 Manage Event Page */
+/* ManageEvent.css */
+
+/* Container for the entire component */
 .manage-event-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #181818;
-    padding: 20px;
-  }
-  
-  /* 🔹 Event Card */
-  .manage-event-card {
-    background: #222;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-    text-align: center;
-    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
-  }
-  
-  .manage-event-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 5px;
-  }
-  
-  .manage-button-group {
-    margin-top: 15px;
-  }
-  
-  .manage-edit-btn, .manage-delete-btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    cursor: pointer;
-  }
-  
-  .manage-edit-btn {
-    background: #4CAF50;
-    color: white;
-  }
-  
-  .manage-delete-btn {
-    background: #D9534F;
-    color: white;
-  }
-  
-  /* 🔹 Modal Styles */
-  .manage-event-modal {
-    background: #282828;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-    margin: auto;
-    color: white;
-  }
-  
-  .manage-event-overlay {
-    background: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .manage-event-modal h2 {
-    text-align: center;
-  }
-  
-  .manage-event-modal input,
-  .manage-event-modal textarea {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    border-radius: 5px;
-    border: none;
-  }
-  
-  .manage-save-btn, .manage-cancel-btn {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .manage-save-btn {
-    background: #4CAF50;
-    color: white;
-  }
-  
-  .manage-cancel-btn {
-    background: #D9534F;
-    color: white;
-  }
-  
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #1a1a1a; /* Dark background */
+  border-radius: 10px;
+}
+
+/* Card styling with horizontal layout */
+.manage-event-card {
+  background-color: #2c2c2c; /* Slightly lighter dark shade */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex; /* Horizontal layout */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Event image styling */
+.manage-event-image {
+  width: 250px;
+  height: 200px;
+  object-fit: cover;
+  border-right: 2px solid #ff69b4; /* Pink border */
+}
+
+/* Event details section */
+.manage-event-details {
+  padding: 20px;
+  flex-grow: 1;
+  color: #fff; /* White text for dark theme */
+}
+
+/* Title styling */
+.manage-event-details h2 {
+  margin-top: 0;
+  color: #ff69b4; /* Pink accent */
+  font-size: 1.8rem;
+}
+
+/* Paragraph text styling */
+.manage-event-details p {
+  margin: 10px 0;
+  color: #d3d3d3; /* Light gray for readability */
+  font-size: 1rem;
+}
+
+/* Button group styling */
+.manage-button-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Button styles */
+.manage-edit-btn,
+.manage-delete-btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+/* Edit button */
+.manage-edit-btn {
+  background-color: #ff69b4; /* Pink theme */
+  color: #fff;
+}
+
+.manage-delete-btn {
+  background-color: #ff1493; /* Darker pink for delete */
+  color: #fff;
+}
+
+/* Hover effects */
+.manage-edit-btn:hover {
+  background-color: #ff85c2;
+  transform: scale(1.05);
+}
+
+.manage-delete-btn:hover {
+  background-color: #ff3399;
+  transform: scale(1.05);
+}
+
+/* Modal Styles */
+.manage-event-modal {
+  background-color: #2c2c2c; /* Dark modal background */
+  color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  margin: 50px auto;
+  border: 2px solid #ff69b4; /* Pink border */
+}
+
+/* Overlay for modal */
+.manage-event-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85); /* Darker overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal title */
+.manage-event-modal h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #ff69b4; /* Pink title */
+  font-size: 1.8rem;
+}
+
+/* Form styling */
+.manage-event-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Input and textarea styling */
+.manage-event-modal input,
+.manage-event-modal textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ff69b4; /* Pink border */
+  border-radius: 5px;
+  background-color: #3a3a3a; /* Dark input background */
+  color: #fff;
+  font-size: 1rem;
+}
+
+/* Placeholder text */
+.manage-event-modal input::placeholder,
+.manage-event-modal textarea::placeholder {
+  color: #ff85c2; /* Lighter pink for placeholder */
+}
+
+/* Textarea specific styling */
+.manage-event-modal textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Modal buttons */
+.manage-save-btn,
+.manage-cancel-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+/* Save button */
+.manage-save-btn {
+  background-color: #ff69b4; /* Pink theme */
+  color: #fff;
+}
+
+/* Cancel button */
+.manage-cancel-btn {
+  background-color: #ff1493; /* Darker pink */
+  color: #fff;
+}
+
+/* Hover effects for modal buttons */
+.manage-save-btn:hover {
+  background-color: #ff85c2;
+  transform: scale(1.05);
+}
+
+.manage-cancel-btn:hover {
+  background-color: #ff3399;
+  transform: scale(1.05);
+}
