@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import api from "../services/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../Style/CreateEvent.css"; // CSS file for styling
+import "../style/CreateEvent.css";
 
 const CreateEventForm = () => {
   const [formData, setFormData] = useState({
@@ -49,142 +49,122 @@ const CreateEventForm = () => {
 
   return (
     <div className="create-event-container">
+      <div className="animated-background"></div>
       <ToastContainer theme="dark" />
-      <div className="form-card">
-        <h2 className="form-title">Create New Event</h2>
-        <form onSubmit={handleSubmit} className="animate-form">
-          {/* Event Title */}
-          <div className="form-group">
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-              className="form-input"
-              placeholder=" " // Required for label animation
-            />
-            <label htmlFor="title" className="form-label">
-              Event Title
-            </label>
-            <span className="focus-border"></span>
+      <div className="form-wrapper">
+        <div className="form-card">
+          <div className="card-header">
+            <h2>Create New Event</h2>
+            <div className="underline"></div>
           </div>
-
-          {/* Short Description */}
-          <div className="form-group">
-            <input
-              type="text"
-              id="shortDescription"
-              name="shortDescription"
-              value={formData.shortDescription}
-              onChange={handleChange}
-              required
-              className="form-input"
-              placeholder=" " // Required for label animation
-            />
-            <label htmlFor="shortDescription" className="form-label">
-              Short Description
-            </label>
-            <span className="focus-border"></span>
-          </div>
-
-          {/* Long Description */}
-          <div className="form-group">
-            <textarea
-              id="longDescription"
-              name="longDescription"
-              value={formData.longDescription}
-              onChange={handleChange}
-              required
-              className="form-input textarea"
-              placeholder=" " // Required for label animation
-            ></textarea>
-            <label htmlFor="longDescription" className="form-label">
-              Long Description
-            </label>
-            <span className="focus-border"></span>
-          </div>
-
-          {/* Date and Price */}
-          <div className="form-row">
-            <div className="form-group half">
+          
+          <form onSubmit={handleSubmit} className="form">
+            <div className="form-group">
               <input
-                type="date"
-                id="date"
-                name="date"
-                value={formData.date}
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
                 onChange={handleChange}
                 required
-                className="form-input"
-                placeholder=" " // Required for label animation
+                placeholder=" "
               />
-              <label htmlFor="date" className="form-label">
-                Event Date
-              </label>
-              <span className="focus-border"></span>
+              <label htmlFor="title">Event Title</label>
+              <div className="input-highlight"></div>
             </div>
 
-            <div className="form-group half">
+            <div className="form-group">
               <input
-                type="number"
-                id="price"
-                name="price"
-                value={formData.price}
+                type="text"
+                id="shortDescription"
+                name="shortDescription"
+                value={formData.shortDescription}
                 onChange={handleChange}
                 required
-                className="form-input"
-                placeholder=" " // Required for label animation
+                placeholder=" "
               />
-              <label htmlFor="price" className="form-label">
-                Price
-              </label>
-              <span className="focus-border"></span>
+              <label htmlFor="shortDescription">Short Description</label>
+              <div className="input-highlight"></div>
             </div>
-          </div>
 
-          {/* Location */}
-          <div className="form-group">
-            <input
-              type="text"
-              id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              required
-              className="form-input"
-              placeholder=" " // Required for label animation
-            />
-            <label htmlFor="location" className="form-label">
-              Location
-            </label>
-            <span className="focus-border"></span>
-          </div>
+            <div className="form-group">
+              <textarea
+                id="longDescription"
+                name="longDescription"
+                value={formData.longDescription}
+                onChange={handleChange}
+                required
+                placeholder=" "
+                rows="4"
+              ></textarea>
+              <label htmlFor="longDescription">Long Description</label>
+              <div className="input-highlight"></div>
+            </div>
 
-          {/* Image URL */}
-          <div className="form-group">
-            <input
-              type="text"
-              id="imageUrl"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-              required
-              className="form-input"
-              placeholder=" " // Required for label animation
-            />
-            <label htmlFor="imageUrl" className="form-label">
-              Image URL
-            </label>
-            <span className="focus-border"></span>
-          </div>
+            <div className="form-row">
+              <div className="form-group">
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  required
+                  placeholder=" "
+                />
+                <label htmlFor="date">Event Date</label>
+                <div className="input-highlight"></div>
+              </div>
 
-          {/* Submit Button */}
-          <button type="submit" className="submit-btn">
-            <span>Create Event</span>
-            <div className="btn-glow"></div>
-          </button>
-        </form>
+              <div className="form-group">
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  placeholder=""
+                />
+                <label htmlFor="price">Price ($)</label>
+                <div className="input-highlight"></div>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                required
+                placeholder=" "
+              />
+              <label htmlFor="location">Location</label>
+              <div className="input-highlight"></div>
+            </div>
+
+            <div className="form-group">
+              <input
+                type="text"
+                id="imageUrl"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleChange}
+                required
+                placeholder=" "
+              />
+              <label htmlFor="imageUrl">Image URL</label>
+              <div className="input-highlight"></div>
+            </div>
+
+            <button type="submit" className="submit-button">
+              <span>Create Event</span>
+              <div className="button-effect"></div>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

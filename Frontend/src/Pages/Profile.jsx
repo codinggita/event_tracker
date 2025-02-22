@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaCamera, FaEnvelope, FaEdit, FaSignOutAlt, FaStar, FaClipboardList, FaMapMarkerAlt } from "react-icons/fa";
 import YourCreatedEvents from "../Component/YourCreatedEvents";
 import YourEventsReview from "../Component/YourEventsReview";
 import "../Style/Profile.css";
@@ -23,6 +24,7 @@ const Profile = () => {
       }
     });
   };
+
   useEffect(() => {
     fetchUserData();
   }, []);
@@ -41,45 +43,55 @@ const Profile = () => {
     <div className="profile-container">
       <div className="profile-header">
         <div className="profile-avatar">
-          <span className="avatar-text">R</span>
-          <span className="camera-icon">📷</span>
+          <span className="avatar-text">
+            {userDetails?.firstName?.charAt(0) || "R"}
+          </span>
+          <div className="camera-icon">
+            <FaCamera />
+          </div>
         </div>
 
         <div className="profile-info">
-          <h1>
-            Username: {userDetails ? userDetails.firstName : "Loading..."}
-          </h1>
-          <p>Email: {userDetails ? userDetails.email : "Loading..."}</p>
-          <p className="location">📍 Ahmedabad</p>
-        </div>
+          <h1>Username: {userDetails ? userDetails.firstName : "Loading..."}</h1>
+          <p className="email">Email: {userDetails ? userDetails.email : "Loading..."}</p>
+          <p className="location">
+            <FaMapMarkerAlt /> Ahmedabad
+          </p>
 
-        <div className="profile-actions">
-          <button className="btn-inbox">📧 Inbox</button>
-          <button className="btn-edit">✏️ Edit Profile</button>
-          <button className="btn-edit" onClick={handleLogout}>
-            {" "}
-            Logout
+          <div className="profile-actions">
+            <button>
+              <FaEnvelope /> Inbox
+            </button>
+            <button>
+              <FaEdit /> Edit Profile
+            </button>
+            <button onClick={handleLogout} className="logout-button">
+              <FaSignOutAlt /> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="tabs-container">
+        <div className="profile-tabs">
+          <button
+            className={`tab-button ${activeTab === "events" ? "active" : ""}`}
+            onClick={() => setActiveTab("events")}
+          >
+            <FaStar /> EVENTS
+          </button>
+
+          <button
+            className={`tab-button ${activeTab === "curated" ? "active" : ""}`}
+            onClick={() => setActiveTab("curated")}
+          >
+            <FaClipboardList /> CURATED LIST
           </button>
         </div>
-      </div>
 
-      <div className="profile-tabs">
-        <button
-          className={`tab ${activeTab === "events" ? "active" : ""}`}
-          onClick={() => setActiveTab("events")}
-        >
-          ⭐ EVENTS
-        </button>
-        <button
-          className={`tab ${activeTab === "curated" ? "active" : ""}`}
-          onClick={() => setActiveTab("curated")}
-        >
-          📋 CURATED LIST
-        </button>
-      </div>
-
-      <div className="tab-content">
-        {activeTab === "events" ? <YourCreatedEvents /> : <YourEventsReview />}
+        <div className="tab-content">
+          {activeTab === "events" ? <YourCreatedEvents /> : <YourEventsReview />}
+        </div>
       </div>
     </div>
   );
