@@ -8,7 +8,7 @@ router.post("/createEvent", checkAuth, createEvent); // ✅ Only Authenticated U
 router.get("/allEvents",checkAuth,allEvents); // ✅ Public Access
 router.get("/yourEvents", checkAuth, yourEvents);
 router.put("/editEvent/:id", checkAuth, editEvent);
-router.delete("deleteEvent/:id", checkAuth, deleteEvent);
+router.delete("/deleteEvent/:id", checkAuth, deleteEvent);
 router.get("/eventDetail/:id",checkAuth,eventDetailPage)
 
 export default router;

@@ -47,29 +47,35 @@ export const yourEvents = async (req, res) => {
   res.json(userEvents);
 };
 
-// ✅ Edit Event (Only Creator)
+//edit event (Only Creator)
 export const editEvent = async (req, res) => {
-  if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-  const event = await Event.findById(req.params.id);
-  if (!event) return res.status(404).json({ message: "Event not found" });
-  if (event.createdBy !== req.user.uid) return res.status(403).json({ message: "Unauthorized" });
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
 
-  const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updatedEvent);
+    if (event.createdBy.toString() !== req.user.uid) {  // Added toString()
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(updatedEvent);
+  } catch (error) {
+    console.error("Edit event error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
-// ✅ Delete Event (Only Creator)
-export const deleteEvent = async (req, res) => {
-  if (!req.user) return res.status(401).json({ message: "Unauthorized" });
-
-  const event = await Event.findById(req.params.id);
-  if (!event) return res.status(404).json({ message: "Event not found" });
-  if (event.createdBy !== req.user.uid) return res.status(403).json({ message: "Unauthorized" });
-
-  await event.deleteOne();
-  res.json({ message: "Event Deleted" });
-};
 
 export const eventDetailPage = async (req, res) => {
   try {
@@ -83,3 +89,19 @@ export const eventDetailPage = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 }
+
+    // Delete Event (Only Creator)
+export const deleteEvent = async (req, res) => {
+      try {
+        const event = await Event.findById(req.params.id);
+        
+        if (!event || !req.user || event.createdBy.toString() !== req.user.uid) {
+          return res.status(403).json({ message: "Not authorized" });
+        }
+    
+        await Event.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Event deleted" });
+      } catch (error) {
+        res.status(500).json({ message: "Server error" });
+      }
+    };
