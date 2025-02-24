@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../services/api";
 import Modal from "react-modal";
 import "../Style/ManageEvent.css";
@@ -21,7 +23,6 @@ const ManageEvent = () => {
     price: "",
   });
 
-  // 🔹 Fetch Event Details
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -30,36 +31,41 @@ const ManageEvent = () => {
         setFormData(response.data);
       } catch (error) {
         console.error("Error fetching event:", error);
+        toast.error("Failed to load event details");
       }
     };
     fetchEvent();
   }, [id]);
 
-  // 🔹 Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // 🔹 Update Event
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/editEvent/${id}`, formData);
-      setEvent(formData);
+      const response = await api.put(`/editEvent/${id}`, formData);
+      setEvent(response.data);
       setIsModalOpen(false);
+      toast.success("Event updated successfully!");
     } catch (error) {
       console.error("Error updating event:", error);
+      toast.error("Failed to update event");
     }
   };
 
-  // 🔹 Delete Event
   const handleDelete = async () => {
-    try {
-      await api.delete(`/deleteEvent/${id}`);
-      navigate("/your-events");
-    } catch (error) {
-      console.error("Error deleting event:", error);
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      try {
+        await api.delete(`/deleteEvent/${id}`);
+        toast.success("Event deleted successfully!");
+        setTimeout(() => {
+          navigate("/profile");
+        }, 1500);
+      } catch (error) {
+        toast.error("Failed to delete event");
+      }
     }
   };
 
@@ -67,6 +73,7 @@ const ManageEvent = () => {
 
   return (
     <div className="manage-event-container">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="manage-event-card">
         <img src={event.imageUrl} alt={event.title} className="manage-event-image" />
         <div className="manage-event-details">
@@ -76,13 +83,16 @@ const ManageEvent = () => {
           <p><strong>Location:</strong> {event.location}</p>
           <p><strong>Price:</strong> ₹{event.price}</p>
           <div className="manage-button-group">
-            <button className="manage-edit-btn" onClick={() => setIsModalOpen(true)}>Edit Event</button>
-            <button className="manage-delete-btn" onClick={handleDelete}>Delete Event</button>
+            <button className="manage-edit-btn" onClick={() => setIsModalOpen(true)}>
+              Edit Event
+            </button>
+            <button className="manage-delete-btn" onClick={handleDelete}>
+              Delete Event
+            </button>
           </div>
         </div>
       </div>
 
-      {/* 🔹 Edit Modal */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
@@ -91,16 +101,72 @@ const ManageEvent = () => {
       >
         <h2>Edit Event</h2>
         <form onSubmit={handleUpdate}>
-          <input type="text" name="title" value={formData.title} onChange={handleChange} required />
-          <input type="text" name="shortDescription" value={formData.shortDescription} onChange={handleChange} required />
-          <textarea name="longDescription" value={formData.longDescription} onChange={handleChange} required></textarea>
-          <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-          <input type="text" name="location" value={formData.location} onChange={handleChange} required />
-          <input type="text" name="imageUrl" value={formData.imageUrl} onChange={handleChange} required />
-          <input type="number" name="price" value={formData.price} onChange={handleChange} required />
-
-          <button type="submit" className="manage-save-btn">Save Changes</button>
-          <button type="button" className="manage-cancel-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
+          <input
+            type="text"
+            name="title"
+            placeholder="Event Title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="shortDescription"
+            placeholder="Short Description"
+            value={formData.shortDescription}
+            onChange={handleChange}
+            required
+          />
+          <textarea
+            name="longDescription"
+            placeholder="Long Description"
+            value={formData.longDescription}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="imageUrl"
+            placeholder="Image URL"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="price"
+            placeholder="Price"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
+          <div className="modal-buttons">
+            <button type="submit" className="manage-save-btn">
+              Save Changes
+            </button>
+            <button
+              type="button"
+              className="manage-cancel-btn"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </Modal>
     </div>

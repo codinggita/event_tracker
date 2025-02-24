@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { auth, db } from "./firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import "../Style/Auth.css"
+import { FaUserPlus, FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import "../Style/Auth.css";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -16,16 +17,14 @@ function Register() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
-      console.log(user);
       if (user) {
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,
           firstName: fname,
           lastName: lname,
-          photo:""
+          photo: ""
         });
       }
-      console.log("User Registered Successfully!!");
       toast.success("User Registered Successfully!!", {
         position: "top-center",
       });
@@ -38,61 +37,71 @@ function Register() {
   };
 
   return (
-    <form onSubmit={handleRegister}>
-      <h3>Sign Up</h3>
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <FaUserPlus size={48} className="auth-icon" />
+          <h2>Create Account</h2>
+          <p>Join us today and start your journey</p>
+        </div>
 
-      <div className="mb-3">
-        <label>First name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="First name"
-          onChange={(e) => setFname(e.target.value)}
-          required
-        />
+        <form onSubmit={handleRegister} className="auth-form">
+          <div className="form-group">
+            <FaUser className="input-icon" />
+            <input
+              type="text"
+              placeholder="First name"
+              onChange={(e) => setFname(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <FaUser className="input-icon" />
+            <input
+              type="text"
+              placeholder="Last name"
+              onChange={(e) => setLname(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <FaEnvelope className="input-icon" />
+            <input
+              type="email"
+              placeholder="Email address"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" className="auth-button">
+            Create Account
+          </button>
+
+          <p className="auth-redirect">
+            Already have an account? <a href="/login">Sign in</a>
+          </p>
+        </form>
       </div>
 
-      <div className="mb-3">
-        <label>Last name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Last name"
-          onChange={(e) => setLname(e.target.value)}
-        />
+      <div className="auth-shapes">
+        <div className="auth-shape"></div>
+        <div className="auth-shape"></div>
+        <div className="auth-shape"></div>
       </div>
-
-      <div className="mb-3">
-        <label>Email address</label>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="mb-3">
-        <label>Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Sign Up
-        </button>
-      </div>
-      <p className="forgot-password text-right">
-        Already registered <a href="/login">Login</a>
-      </p>
-    </form>
+    </div>
   );
 }
+
 export default Register;

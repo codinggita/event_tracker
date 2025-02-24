@@ -1,7 +1,6 @@
 /* Events Container */
 .events-container {
   padding: 40px;
-  background-color: #1e1e1e;
   min-height: 100vh;
   color: #ffffff;
   margin-top: 10vh;
@@ -20,6 +19,7 @@
   grid-template-columns: repeat(2, 1fr); /* 2 Cards Per Row */
   gap: 25px;
   width: 100%;  /* Make full width */
+  margin-top: 1.3em;
 }
 
 /* Event Card */
@@ -30,6 +30,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   width: 100%;
   animation: fadeIn 0.8s ease-in-out;
+  margin-top: 1em;
 }
 
 /* Animation for fade-in */

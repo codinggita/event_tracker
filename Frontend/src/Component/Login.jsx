@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { auth } from "./firebase";
 import { toast } from "react-toastify";
 import SignInwithGoogle from "./signInWithGoogle";
-import "../Style/Auth.css"
+import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
+import "../Style/Auth.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,14 +18,13 @@ function Login() {
       const token = await userCredential.user.getIdToken(true);
       localStorage.setItem("authToken", token);
       
-      // Set up token refresh
       setInterval(async () => {
         const user = auth.currentUser;
         if (user) {
           const newToken = await user.getIdToken(true);
           localStorage.setItem("authToken", newToken);
         }
-      }, 10 * 60 * 1000); // Refresh every 10 minutes
+      }, 10 * 60 * 1000);
 
       toast.success("User logged in Successfully", { position: "top-center" });
       window.location.href = "/";
@@ -33,46 +33,61 @@ function Login() {
       toast.error(error.message, { position: "bottom-center" });
     }
   };
-  
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Login</h3>
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <FaUser size={48} className="auth-icon" />
+          <h2>Welcome Back</h2>
+          <p>Enter your credentials to access your account</p>
+        </div>
 
-      <div className="mb-3">
-        <label>Email address</label>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <FaEnvelope className="input-icon" />
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-      <div className="mb-3">
-        <label>Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
+          <div className="form-group">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
+          <button type="submit" className="auth-button">
+            Sign In
+          </button>
+
+          <div className="auth-divider">
+            <span>or continue with</span>
+          </div>
+
+          <SignInwithGoogle />
+
+          <p className="auth-redirect">
+            Don't have an account? <a href="/register">Sign up</a>
+          </p>
+        </form>
       </div>
-      <p className="forgot-password text-right">
-        New user? <a href="/register">Register Here</a>
-      </p>
-      <SignInwithGoogle/>
-    </form>
+      
+      <div className="auth-shapes">
+        <div className="auth-shape"></div>
+        <div className="auth-shape"></div>
+        <div className="auth-shape"></div>
+      </div>
+    </div>
   );
 }
 

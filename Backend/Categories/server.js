@@ -16,6 +16,8 @@ app.use(express.json());
 connectDB();
 app.use("/api", eventRoutes);
 
+// index.js or app.js
 app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+  console.log('Server running on port', process.env.PORT);
+  // Log all registered routes
 });
