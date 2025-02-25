@@ -96,6 +96,7 @@ const CreateEventForm = () => {
                 required
                 placeholder=" "
                 rows="4"
+                className="rp"
               ></textarea>
               <label htmlFor="longDescription">Long Description</label>
               <div className="input-highlight"></div>
