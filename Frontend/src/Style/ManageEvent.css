@@ -189,3 +189,53 @@
   background-color: #ff3399;
   transform: scale(1.05);
 }
+
+/* Registered Users Section (Updated) */
+.registered-users {
+  margin-top: 20px;
+  background: #2c2c2c; /* Dark background to match theme */
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+  border: 2px solid #ff69b4; /* Pink border for consistency */
+}
+
+.registered-users h3 {
+  font-size: 1.4rem;
+  color: #ff69b4; /* Pink accent for title */
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.registered-users ul {
+  list-style: none;
+  padding: 0;
+}
+
+.registered-users li {
+  padding: 10px;
+  border-bottom: 1px solid #ff69b4; /* Pink border for each item */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  color: #fff; /* White text for dark background */
+}
+
+.registered-users li:hover {
+  background-color: #3a3a3a; /* Slightly lighter dark shade on hover */
+}
+
+.registered-users li:last-child {
+  border-bottom: none;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #fff; /* White for visibility on dark background */
+}
+
+.user-email {
+  color: #d3d3d3; /* Light gray for readability on dark background */
+  font-style: italic;
+}

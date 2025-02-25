@@ -22,18 +22,6 @@
   transform: translateY(0);
 }
 
-/* When user has scrolled down, background changes */
-.navbar-scrolled {
-  background: rgba(17, 24, 39, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  padding: 1.25rem 2rem;
-  height: 75px; /* Maintain height after scrolling */
-  max-width: 1400px;
-  border-radius: 37px;
-  margin-left: 4em;
-}
-
 .navbar {
   max-width: 1400px;
   margin: 0 auto;

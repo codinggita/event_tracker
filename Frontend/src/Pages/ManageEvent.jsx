@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import api from "../services/api";
 import Modal from "react-modal";
 import "../Style/ManageEvent.css";
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // Add Firebase auth imports
 
 Modal.setAppElement("#root");
 
@@ -12,6 +13,7 @@ const ManageEvent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
+  const [registeredUsers, setRegisteredUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -22,20 +24,39 @@ const ManageEvent = () => {
     imageUrl: "",
     price: "",
   });
+  // Add state for the current user
+  const [user, setUser] = useState(null);
+
+  // Firebase auth listener to get the current user
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    // Cleanup subscription
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
-    const fetchEvent = async () => {
+    const fetchEventAndUsers = async () => {
       try {
-        const response = await api.get(`/eventDetail/${id}`);
-        setEvent(response.data);
-        setFormData(response.data);
+        const eventResponse = await api.get(`/eventDetail/${id}`);
+        setEvent(eventResponse.data);
+        setFormData(eventResponse.data);
+
+        // Only fetch registered users if the current user is the host
+        if (user && eventResponse.data.createdByEmail === user.email) {
+          const usersResponse = await api.get(`/registeredUsers/${id}`);
+          setRegisteredUsers(usersResponse.data);
+        }
       } catch (error) {
-        console.error("Error fetching event:", error);
-        toast.error("Failed to load event details");
+        console.error("Error fetching event and registered users:", error);
+        toast.error("Failed to load data");
       }
     };
-    fetchEvent();
-  }, [id]);
+    fetchEventAndUsers();
+  }, [id, user]); // Add user to dependency array to refetch when user changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,6 +113,25 @@ const ManageEvent = () => {
           </div>
         </div>
       </div>
+
+      {/* ✅ Registered Users Section (only visible to host) */}
+      {user && event.createdByEmail === user.email && (
+        <div className="registered-users">
+          <h3>Registered Users</h3>
+          {registeredUsers.length === 0 ? (
+            <p>No users have registered for this event.</p>
+          ) : (
+            <ul>
+              {registeredUsers.map((user, index) => (
+                <li key={index}>
+                  <span className="user-name">{user.userName}</span> 
+                  <span className="user-email">({user.userEmail})</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       <Modal
         isOpen={isModalOpen}

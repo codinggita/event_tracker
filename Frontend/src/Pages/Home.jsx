@@ -11,7 +11,6 @@ import six from "../assets/Luke.avif";
 import seven from "../assets/shawn Mendes.webp";
 import Nav from "../Component/Nav";  // Importing your custom Nav component
 import Banner from "../Component/Banner";
-import Card from "../Component/Card";
 
 
 const Home = () => {
@@ -89,8 +88,6 @@ const Home = () => {
           </motion.div>
         </div>
       </div>
-
-    <Card />
   
     </>
   );

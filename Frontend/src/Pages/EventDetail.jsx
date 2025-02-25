@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import emailjs from '@emailjs/browser';
-import { BsCalendarEvent, BsGeoAlt, BsCurrencyDollar, BsX, BsSend, BsPerson } from 'react-icons/bs';
+import { BsCalendarEvent, BsGeoAlt, BsCurrencyDollar, BsX, BsSend } from 'react-icons/bs';
 import api from "../services/api";
 import "../Style/EventDetail.css";
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // Firebase auth import
+import { toast, ToastContainer } from "react-toastify"; // Import react-toastify
+import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
 
 const EventDetail = () => {
   const { id } = useParams();
@@ -16,6 +19,19 @@ const EventDetail = () => {
     email: '',
     message: ''
   });
+  // Firebase user state
+  const [user, setUser] = useState(null);
+  
+  // Firebase auth listener
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    
+    // Cleanup subscription
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchEventDetail = async () => {
@@ -38,21 +54,56 @@ const EventDetail = () => {
 
   const handleQuerySubmit = async (e) => {
     e.preventDefault();
+  
+    if (!event?.createdByEmail) {
+      alert("Host email not found!");
+      return;
+    }
+  
+    const emailParams = {
+      name: formData.name,
+      from_email: user.email, 
+      message: formData.message, 
+      to_email: event.createdByEmail, 
+      reply_to: user.email, 
+    };
+  
     try {
       await emailjs.send(
-        'service_e2nckvu',
-        'template_veste8y',
-        formData,
-        'BQ2VzFLCCB-cyp4N_'
+        "service_e2nckvu",
+        "template_veste8y",
+        emailParams,
+        "BQ2VzFLCCB-cyp4N_"
       );
-      alert('Message sent successfully!');
+  
+      alert("Message sent successfully to the event host!");
       setShowQueryForm(false);
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      alert('Failed to send message. Please try again.');
+      alert("Failed to send message. Please try again.");
     }
   };
 
+  const handleRegister = async () => {
+    if (!user) {
+      toast.error("Please login to register for this event"); // Use toast.error instead of alert
+      return;
+    }
+
+    try {
+      const response = await api.post("/registerEvent", {
+        eventId: id,
+        userId: user.uid,
+        userEmail: user.email,
+        userName: user.displayName || user.email.split('@')[0],
+      });
+
+      toast.success(response.data.message); // Use toast.success for success message
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Registration failed"); // Use toast.error for error message
+    }
+  };
+  
   if (loading) {
     return <div className="loading">Loading event details...</div>;
   }
@@ -142,7 +193,7 @@ const EventDetail = () => {
             </div>
           </div>
 
-          <button className="register-button">
+          <button className="register-button" onClick={handleRegister}>
             Register for Event
           </button>
 
@@ -152,6 +203,7 @@ const EventDetail = () => {
           >
             Have a Question?
           </button>
+          
         </div>
       </div>
 
@@ -170,12 +222,11 @@ const EventDetail = () => {
 
             <form onSubmit={handleQuerySubmit} className="query-form">
               <div className="form-group">
-                <label htmlFor="name">Name</label>
                 <div className="input-with-icon">
-                  <BsPerson className="input-icon" />
                   <input
                     type="text"
                     id="name"
+                    placeholder="Name"
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     required
@@ -184,9 +235,9 @@ const EventDetail = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">Email</label>
                 <input
                   type="email"
+                  placeholder="Email"
                   id="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -195,9 +246,9 @@ const EventDetail = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="message">Message</label>
                 <textarea
                   id="message"
+                  placeholder="Message"
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
                   required
@@ -212,6 +263,9 @@ const EventDetail = () => {
           </div>
         </div>
       )}
+
+      {/* Toast Container for notifications */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
