@@ -1,17 +1,38 @@
 /* Events Container */
 .events-container {
-  padding: 40px;
   min-height: 100vh;
   color: #ffffff;
-  margin-top: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;  /* Ensuring it takes full width */
-  max-width: 1400px; /* Limit to prevent too wide stretch */
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%; 
+  background-color: #333333;
 }
+
+.events-title {
+  color: #ffffff;
+  font-size: 3rem;
+  text-align: center;
+  margin: 5rem 0;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  position: relative;
+  text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+}
+
+.events-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff69b4, #ff1493);
+  border-radius: 2px;
+}
+
 
 /* Events List - Proper Grid for 2 Cards Per Row */
 .events-list {
@@ -19,7 +40,7 @@
   grid-template-columns: repeat(2, 1fr); /* 2 Cards Per Row */
   gap: 25px;
   width: 100%;  /* Make full width */
-  margin-top: 1.3em;
+  padding: 50px;
 }
 
 /* Event Card */
@@ -30,7 +51,6 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   width: 100%;
   animation: fadeIn 0.8s ease-in-out;
-  margin-top: 1em;
 }
 
 /* Animation for fade-in */

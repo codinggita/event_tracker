@@ -2,38 +2,37 @@ import React, { useEffect, useState } from "react";
 import { FaCamera, FaEnvelope, FaEdit, FaSignOutAlt, FaStar, FaClipboardList, FaMapMarkerAlt } from "react-icons/fa";
 import YourCreatedEvents from "../Component/YourCreatedEvents";
 import YourEventsReview from "../Component/YourEventsReview";
-import "../Style/Profile.css";
 import { auth, db } from "../Component/firebase.js";
 import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom"; // ✅ Redirect ke liye useNavigate()
+import "../Style/Profile.css"
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("events");
   const [userDetails, setUserDetails] = useState(null);
-
-  const fetchUserData = async () => {
-    auth.onAuthStateChanged(async (user) => {
-      console.log(user);
-
-      const docRef = doc(db, "Users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUserDetails(docSnap.data());
-        console.log(docSnap.data());
-      } else {
-        console.log("User is not logged in");
-      }
-    });
-  };
+  const navigate = useNavigate(); // ✅ Use navigate instead of window.location
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser; // ✅ Firebase me logged-in user check
+      if (user) {
+        const docRef = doc(db, "Users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserDetails(docSnap.data());
+        }
+      } else {
+        console.log("User not logged in");
+      }
+    };
+
     fetchUserData();
   }, []);
 
   async function handleLogout() {
     try {
       await auth.signOut();
-      window.location.href = "/login";
-      console.log("User logged out successfully!");
+      navigate("/login"); // ✅ Better redirect method
     } catch (error) {
       console.error("Error logging out:", error.message);
     }
@@ -78,14 +77,14 @@ const Profile = () => {
             className={`tab-button ${activeTab === "events" ? "active" : ""}`}
             onClick={() => setActiveTab("events")}
           >
-            <FaStar /> EVENTS
+            <FaStar /> Your Events
           </button>
 
           <button
             className={`tab-button ${activeTab === "curated" ? "active" : ""}`}
             onClick={() => setActiveTab("curated")}
           >
-            <FaClipboardList /> CURATED LIST
+            <FaClipboardList /> Reivews
           </button>
         </div>
 
