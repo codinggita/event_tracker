@@ -5,19 +5,19 @@
   max-width: 900px;
   margin: 20px auto;
   padding: 20px;
-  background-color: #1a1a1a; /* Dark background */
   border-radius: 10px;
 }
 
 /* Card styling with horizontal layout */
 .manage-event-card {
-  background-color: #2c2c2c; /* Slightly lighter dark shade */
+  background: linear-gradient(135deg, rgba(15, 15, 15, 0.9) 0%, rgba(25, 25, 35, 0.95) 100%);/* Slightly lighter dark shade */
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   display: flex; /* Horizontal layout */
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 6em;
 }
 
 /* Event image styling */
@@ -25,7 +25,7 @@
   width: 250px;
   height: 200px;
   object-fit: cover;
-  border-right: 2px solid #ff69b4; /* Pink border */
+  border-right: 2px solid #B388FF; /* Pink border */
 }
 
 /* Event details section */
@@ -38,7 +38,7 @@
 /* Title styling */
 .manage-event-details h2 {
   margin-top: 0;
-  color: #ff69b4; /* Pink accent */
+  color: #B388FF; /* Pink accent */
   font-size: 1.8rem;
 }
 
@@ -71,23 +71,23 @@
 
 /* Edit button */
 .manage-edit-btn {
-  background-color: #ff69b4; /* Pink theme */
+  background-color: #B388FF; /* Pink theme */
   color: #fff;
 }
 
 .manage-delete-btn {
-  background-color: #ff1493; /* Darker pink for delete */
+  background-color: #B388FF; /* Darker pink for delete */
   color: #fff;
 }
 
 /* Hover effects */
 .manage-edit-btn:hover {
-  background-color: #ff85c2;
+  background-color: #7b5ab5;
   transform: scale(1.05);
 }
 
 .manage-delete-btn:hover {
-  background-color: #ff3399;
+  background-color: #7a56b9;
   transform: scale(1.05);
 }
 
@@ -100,7 +100,7 @@
   max-width: 600px;
   width: 100%;
   margin: 50px auto;
-  border: 2px solid #ff69b4; /* Pink border */
+  border: 2px solid #B388FF; /* Pink border */
 }
 
 /* Overlay for modal */
@@ -120,7 +120,7 @@
 .manage-event-modal h2 {
   margin-top: 0;
   margin-bottom: 20px;
-  color: #ff69b4; /* Pink title */
+  color: #B388FF; /* Pink title */
   font-size: 1.8rem;
 }
 
@@ -136,7 +136,7 @@
 .manage-event-modal textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ff69b4; /* Pink border */
+  border: 1px solid #B388FF; /* Pink border */
   border-radius: 5px;
   background-color: #3a3a3a; /* Dark input background */
   color: #fff;
@@ -146,7 +146,7 @@
 /* Placeholder text */
 .manage-event-modal input::placeholder,
 .manage-event-modal textarea::placeholder {
-  color: #ff85c2; /* Lighter pink for placeholder */
+  color: #B388FF; /* Lighter pink for placeholder */
 }
 
 /* Textarea specific styling */
@@ -169,24 +169,25 @@
 
 /* Save button */
 .manage-save-btn {
-  background-color: #ff69b4; /* Pink theme */
+  background-color: #B388FF; /* Pink theme */
   color: #fff;
 }
 
 /* Cancel button */
 .manage-cancel-btn {
-  background-color: #ff1493; /* Darker pink */
+  background-color: #B388FF; /* Darker pink */
   color: #fff;
+  margin-left: 3em;
 }
 
 /* Hover effects for modal buttons */
 .manage-save-btn:hover {
-  background-color: #ff85c2;
+  background-color: #7356a6;
   transform: scale(1.05);
 }
 
 .manage-cancel-btn:hover {
-  background-color: #ff3399;
+  background-color: #7959b0;
   transform: scale(1.05);
 }
 
@@ -197,12 +198,12 @@
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadow */
-  border: 2px solid #ff69b4; /* Pink border for consistency */
+  border: 2px solid #B388FF; /* Pink border for consistency */
 }
 
 .registered-users h3 {
   font-size: 1.4rem;
-  color: #ff69b4; /* Pink accent for title */
+  color: #B388FF; /* Pink accent for title */
   margin-bottom: 15px;
   text-align: center;
 }
@@ -214,7 +215,7 @@
 
 .registered-users li {
   padding: 10px;
-  border-bottom: 1px solid #ff69b4; /* Pink border for each item */
+  border-bottom: 1px solid #B388FF; /* Pink border for each item */
   display: flex;
   justify-content: space-between;
   align-items: center;

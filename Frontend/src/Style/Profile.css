@@ -13,7 +13,6 @@
 }
 
 .profile-container {
-  background-color: var(--bg-primary);
   min-height: 100vh;
   color: var(--text-primary);
   padding: 2rem;

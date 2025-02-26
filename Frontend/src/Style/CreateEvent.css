@@ -1,6 +1,6 @@
 /* Modern Dark Theme Variables */
 :root {
-  --primary-color: #ea00ff;
+  --primary-color: #B388FF;
   --secondary-color: #00ffee;
   --background-dark: #0a0a0a;
   --card-background: rgba(15, 15, 15, 0.95);
@@ -21,7 +21,6 @@
   padding: 2rem;
   position: relative;
   overflow: hidden;
-  background: var(--background-dark);
   padding: 4rem; 
 }
 
