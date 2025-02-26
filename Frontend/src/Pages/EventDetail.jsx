@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import emailjs from '@emailjs/browser';
-import { BsCalendarEvent, BsGeoAlt, BsCurrencyDollar, BsX, BsSend } from 'react-icons/bs';
+import { BsCalendarEvent, BsGeoAlt,BsX, BsSend } from 'react-icons/bs';
+import { BiRupee } from "react-icons/bi"
 import api from "../services/api";
 import "../Style/EventDetail.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth"; // Firebase auth import
@@ -163,7 +164,7 @@ const EventDetail = () => {
             </div>
 
             <div className="detail-card">
-              <BsCurrencyDollar className="icon" />
+              < BiRupee className="icon" />
               <div className="detail-info">
                 <h3>Price</h3>
                 <p>₹{event.price}</p>
