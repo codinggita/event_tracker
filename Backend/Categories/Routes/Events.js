@@ -1,5 +1,5 @@
 import express from "express";
-import { createEvent, allEvents, yourEvents, editEvent, deleteEvent, eventDetailPage } from "../Controllers/Events.js";
+import { createEvent, allEvents, yourEvents, editEvent, deleteEvent, eventDetailPage,searchEvents  } from "../Controllers/Events.js";
 import { registerForEvent, getRegisteredUsers } from "../Controllers/RegistrationController.js";
 import { checkAuth } from "../middleware/auth.js";  // ✅ Middleware Import
 
@@ -13,5 +13,6 @@ router.delete("/deleteEvent/:id", checkAuth, deleteEvent);
 router.get("/eventDetail/:id",checkAuth,eventDetailPage);
 router.post("/registerEvent", registerForEvent);
 router.get("/registeredUsers/:eventId", getRegisteredUsers);
+router.get("/searchEvents", searchEvents); // ✅ Search API
 
 export default router;

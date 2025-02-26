@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaBars } from "react-icons/fa6";
 import { Compass } from "lucide-react";
 import { auth } from "../Component/firebase"; // Import Firebase auth
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import SearchBar from "./SearchBar"; // ✅ Import SearchBar
 import "../Style/Nav.css";
 
 export default function Navbar() {
@@ -50,6 +51,9 @@ export default function Navbar() {
             <span className="logo-text">EventTracker</span>
           </Link>
         </div>
+
+        {/* ✅ Show SearchBar only if user is logged in */}
+        {user && <SearchBar />}  
 
         <div className="navbar-right">
           {user ? (

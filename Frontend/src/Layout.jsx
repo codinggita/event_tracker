@@ -8,7 +8,8 @@ import EventDetail from "./Pages/EventDetail";
 import CreateEvent from "./Pages/CreateEvent";
 import Login from "./Component/Login";
 import Register from "./Component/Register";
-import ManageEvent from "./Pages/ManageEvent"
+import ManageEvent from "./Pages/ManageEvent";
+import SearchResults from "./Pages/SearchResults";
 
 function Layout() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function Layout() {
         <Route path="/eventDetail/:id" element={<EventDetail />} />
         <Route path="/createEvent" element={<CreateEvent />} />
         <Route path="/manage/:id" element={<ManageEvent />} />
+        <Route path="/searchResults" element={<SearchResults />} />  
       </Routes>
     </>
   );

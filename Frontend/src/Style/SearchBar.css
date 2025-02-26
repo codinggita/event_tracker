@@ -1,0 +1,17 @@
+.search-bar input{
+  width: 22em;
+  height: 2.5em;
+  position: relative;
+  margin-right: 30em;
+  border-radius: 40px;
+}
+
+.search-icone{
+    width: 20px;
+    height: 20px;
+    color: rgb(156, 156, 156);
+    position: absolute;
+    left: 43.5%;
+    top: 34.5%;
+    cursor: pointer;
+}
