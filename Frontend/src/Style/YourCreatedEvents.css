@@ -2,7 +2,6 @@
 /* Events Container (Pinkish Background) */
 .your-event-container {
   padding: 0px;
-  background-color: #14141422; /* Pinkish background as in the image */
   min-height: 100vh;
   color: #ffffff;
 }
@@ -28,7 +27,7 @@
 
 /* Event Card */
 .your-event-card {
-  background-color: #1a1a1a; /* Dark background for cards */
+  background: linear-gradient(135deg, rgba(15, 15, 15, 0.9) 0%, rgba(25, 25, 35, 0.95) 100%); /* Dark background for cards */
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -36,7 +35,7 @@
   width: 100%; /* Ensure full width within the grid column */
   max-width: 1000px; /* Increased max-width for larger cards */
   animation: your-event-fadeIn 0.8s ease-in-out; /* Fade-in animation for cards */
-  border-left: 5px solid #c175c9; /* Cyan border on left, matching image */
+  border-left: 5px solid #B388FF; /* Cyan border on left, matching image */
 }
 
 /* Animation for fade-in */
@@ -88,7 +87,7 @@
 
 /* Status Badge (Purple as in the image) */
 .your-event-status-badge {
-  background-color: #c175c9; /* Purple for "Going" badge */
+  background-color: #B388FF; /* Purple for "Going" badge */
   color: #1a1a1a;
   padding: 5px 12px;
   border-radius: 20px;
@@ -137,7 +136,7 @@
 
 /* View Detail Button (Cyan as in the image) */
 .your-event-view-detail-button {
-  background-color: #c175c9; /* Cyan for button */
+  background-color: #B388FF; /* Cyan for button */
   color: #1a1a1a;
   border: none;
   padding: 10px 20px;
@@ -160,7 +159,7 @@
 
 /* Manage Button (Cyan as in the image, matching View Details) */
 .your-event-manage-button {
-  background-color: #c175c9; /* Cyan for button, matching View Details */
+  background-color: #B388FF; /* Cyan for button, matching View Details */
   color: #1a1a1a;
   border: none;
   padding: 10px 20px;
@@ -237,7 +236,7 @@
   .your-event-info {
     padding: 15px;
     border-left: none;
-    border-top: 5px solid #c175c9; /* Cyan border on top for mobile */
+    border-top: 5px solid #B388FF; /* Cyan border on top for mobile */
     border-radius: 10px 10px 0 0; /* Adjust rounding for mobile */
   }
 

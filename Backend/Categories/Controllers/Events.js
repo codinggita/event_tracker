@@ -3,9 +3,9 @@ import Event from "../Models/EventCard.js";
 // ✅ Create Event
 export const createEvent = async (req, res) => {
   try {
-    const { title, imageUrl, shortDescription, longDescription, date, location, price } = req.body;
+    const { title, imageUrl, shortDescription, longDescription,category,date, location, price } = req.body;
 
-    if (!title || !imageUrl || !shortDescription || !longDescription || !date || !location || !price) {
+    if (!title || !imageUrl || !shortDescription || !longDescription || !date || !location || !price || !category) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -17,6 +17,7 @@ export const createEvent = async (req, res) => {
       date,
       location,
       price,
+      category,
       createdBy: req.user.uid, // ✅ Firebase UID from Token
       createdByEmail: req.user.email, // ✅ User Email from Token
     });
@@ -122,3 +123,29 @@ export const searchEvents = async (req, res) => {
       res.status(500).json({ message: "Error fetching search results", error });
   }
 };    
+
+
+ export const categoryEvents = async (req, res) => {
+  try {
+    const categoryName = req.params.category;
+    console.log("Searching for category:", categoryName);
+    
+    // Try exact match first
+    let events = await Event.find({ category: categoryName });
+    
+    // If no events found, try case-insensitive search
+    if (events.length === 0) {
+      const categoryQuery = new RegExp(categoryName, "i");
+      events = await Event.find({ category: { $regex: categoryQuery } });
+    }
+
+    if (events.length === 0) {
+      return res.status(200).json({ message: "No events found in this category." });
+    }
+
+    res.status(200).json(events);
+  } catch (error) {
+    console.error("Category search error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+}

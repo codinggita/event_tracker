@@ -84,7 +84,7 @@ const Profile = () => {
             className={`tab-button ${activeTab === "curated" ? "active" : ""}`}
             onClick={() => setActiveTab("curated")}
           >
-            <FaClipboardList /> Reivews
+            <FaClipboardList />Curated List
           </button>
         </div>
 

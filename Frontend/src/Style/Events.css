@@ -1,3 +1,4 @@
+
 /* Events Container */
 .events-container {
   min-height: 100vh;
@@ -6,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%; 
-  background-color: #333333;
+  /* background-color: #15121a; */
 }
 
 .events-title {
@@ -45,7 +46,7 @@
 
 /* Event Card */
 .event-card {
-  background-color: #1a1a1a;
+  background: linear-gradient(135deg, rgba(15, 15, 15, 0.9) 0%, rgba(25, 25, 35, 0.95) 100%);
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -80,7 +81,7 @@
   padding: 20px;
   background-color: #1a1a1a;
   border-radius: 10px;
-  border-left: 5px solid #c175c9;
+  border-left: 5px solid #B388FF;
 }
 
 /* Event Header */
@@ -93,7 +94,7 @@
 
 /* Event Icons */
 .event-icon {
-  color: #c175c9;
+  color: #B388FF;
   font-size: 18px;
 }
 
@@ -106,7 +107,7 @@
 
 /* Status Badge */
 .status-badge {
-  background-color: #c175c9;
+  background-color: #B388FF;
   color: #1a1a1a;
   padding: 5px 12px;
   border-radius: 20px;
@@ -154,7 +155,7 @@
 
 /* View Detail Button */
 .view-detail-button {
-  background-color: #c175c9;
+  background-color: #B388FF;
   color: #1a1a1a;
   border: none;
   padding: 10px 20px;
