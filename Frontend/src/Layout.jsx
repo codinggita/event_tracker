@@ -10,6 +10,7 @@ import Login from "./Component/Login";
 import Register from "./Component/Register";
 import ManageEvent from "./Pages/ManageEvent";
 import SearchResults from "./Pages/SearchResults";
+import CategoryEvents from "./Pages/CategoryEvents";
 
 function Layout() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function Layout() {
         <Route path="/createEvent" element={<CreateEvent />} />
         <Route path="/manage/:id" element={<ManageEvent />} />
         <Route path="/searchResults" element={<SearchResults />} />  
+        <Route path="/category/:category" element={<CategoryEvents />} />
       </Routes>
     </>
   );
