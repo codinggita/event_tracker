@@ -13,6 +13,7 @@ const CreateEventForm = () => {
     location: "",
     imageUrl: "",
     price: "",
+    category:""
   });
 
   const handleChange = (e) => {
@@ -99,6 +100,20 @@ const CreateEventForm = () => {
                 className="rp"
               ></textarea>
               <label htmlFor="longDescription">Long Description</label>
+              <div className="input-highlight"></div>
+            </div>
+
+            <div className="form-group">
+            <input
+                id="category"
+                type="text"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                placeholder=""
+              />
+              <label htmlFor="category">Category</label>
               <div className="input-highlight"></div>
             </div>
 
