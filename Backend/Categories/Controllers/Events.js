@@ -105,3 +105,20 @@ export const deleteEvent = async (req, res) => {
         res.status(500).json({ message: "Server error" });
       }
     };
+
+
+// ✅ Search Events Controller
+export const searchEvents = async (req, res) => {
+  try {
+      const query = req.query.q || ""; // Get search query
+      if (!query) return res.status(200).json({ events: [] }); // Return empty if no query
+
+      const events = await Event.find({
+          title: { $regex: query, $options: "i" }, // Case-insensitive search
+      });
+
+      res.status(200).json({ events });
+  } catch (error) {
+      res.status(500).json({ message: "Error fetching search results", error });
+  }
+};    
