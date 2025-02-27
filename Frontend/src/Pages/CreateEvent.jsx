@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../style/CreateEvent.css";
+import Loader from "../Component/Loader"; // Loader import
 
 const CreateEventForm = () => {
   const [formData, setFormData] = useState({
@@ -13,8 +14,17 @@ const CreateEventForm = () => {
     location: "",
     imageUrl: "",
     price: "",
-    category:""
+    category: "",
   });
+
+  const [loading, setLoading] = useState(true); // Initially loader show hoga
+
+  // Page open hote hi 2.5 sec ke liye loader dikhana
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false); // 2.5 sec baad loader hide hoga
+    }, 2500);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,33 +33,41 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await api.post("createEvent", formData);
-      if (response.status === 201) {
-        toast.success("Event created successfully!");
-        setFormData({
-          title: "",
-          shortDescription: "",
-          longDescription: "",
-          date: "",
-          location: "",
-          imageUrl: "",
-          price: "",
-        });
+    setLoading(true); // Form submit karne ke baad loader dikhana
+
+    setTimeout(async () => {
+      try {
+        const response = await api.post("createEvent", formData);
+        if (response.status === 201) {
+          toast.success("Event created successfully!");
+          setFormData({
+            title: "",
+            shortDescription: "",
+            longDescription: "",
+            date: "",
+            location: "",
+            imageUrl: "",
+            price: "",
+            category: "",
+          });
+        }
+      } catch (error) {
+        console.error("Error creating event:", error);
+        if (error.response?.status === 401) {
+          toast.error("Please login first");
+          window.location.href = "/login";
+        } else {
+          toast.error("Failed to create event. Try again!");
+        }
+      } finally {
+        setLoading(false); // Loader hide karna
       }
-    } catch (error) {
-      console.error("Error creating event:", error);
-      if (error.response?.status === 401) {
-        toast.error("Please login first");
-        window.location.href = "/login";
-      } else {
-        toast.error("Failed to create event. Try again!");
-      }
-    }
+    }, 2000); // 2 sec loader dikhane ke baad response handle karega
   };
 
   return (
     <div className="create-event-container">
+      {loading && <Loader />} {/* Loader Centered */}
       <div className="animated-background"></div>
       <ToastContainer theme="dark" />
       <div className="form-wrapper">
@@ -58,128 +76,130 @@ const CreateEventForm = () => {
             <h2>Create New Event</h2>
             <div className="underline"></div>
           </div>
-          
-          <form onSubmit={handleSubmit} className="form">
-            <div className="form-group">
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-                placeholder=" "
-              />
-              <label htmlFor="title">Event Title</label>
-              <div className="input-highlight"></div>
-            </div>
 
-            <div className="form-group">
-              <input
-                type="text"
-                id="shortDescription"
-                name="shortDescription"
-                value={formData.shortDescription}
-                onChange={handleChange}
-                required
-                placeholder=" "
-              />
-              <label htmlFor="shortDescription">Short Description</label>
-              <div className="input-highlight"></div>
-            </div>
-
-            <div className="form-group">
-              <textarea
-                id="longDescription"
-                name="longDescription"
-                value={formData.longDescription}
-                onChange={handleChange}
-                required
-                placeholder=" "
-                rows="4"
-                className="rp"
-              ></textarea>
-              <label htmlFor="longDescription">Long Description</label>
-              <div className="input-highlight"></div>
-            </div>
-
-            <div className="form-group">
-            <input
-                id="category"
-                type="text"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-                placeholder=""
-              />
-              <label htmlFor="category">Category</label>
-              <div className="input-highlight"></div>
-            </div>
-
-            <div className="form-row">
+          {!loading && ( // Jab tak loading true hai, form hide rahega
+            <form onSubmit={handleSubmit} className="form">
               <div className="form-group">
                 <input
-                  type="date"
-                  id="date"
-                  name="date"
-                  value={formData.date}
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
                   required
                   placeholder=" "
                 />
-                <label htmlFor="date">Event Date</label>
+                <label htmlFor="title">Event Title</label>
                 <div className="input-highlight"></div>
               </div>
 
               <div className="form-group">
                 <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  value={formData.price}
+                  type="text"
+                  id="shortDescription"
+                  name="shortDescription"
+                  value={formData.shortDescription}
+                  onChange={handleChange}
+                  required
+                  placeholder=" "
+                />
+                <label htmlFor="shortDescription">Short Description</label>
+                <div className="input-highlight"></div>
+              </div>
+
+              <div className="form-group">
+                <textarea
+                  id="longDescription"
+                  name="longDescription"
+                  value={formData.longDescription}
+                  onChange={handleChange}
+                  required
+                  placeholder=" "
+                  rows="4"
+                  className="rp"
+                ></textarea>
+                <label htmlFor="longDescription">Long Description</label>
+                <div className="input-highlight"></div>
+              </div>
+
+              <div className="form-group">
+                <input
+                  id="category"
+                  type="text"
+                  name="category"
+                  value={formData.category}
                   onChange={handleChange}
                   required
                   placeholder=""
                 />
-                <label htmlFor="price">Price ($)</label>
+                <label htmlFor="category">Category</label>
                 <div className="input-highlight"></div>
               </div>
-            </div>
 
-            <div className="form-group">
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                required
-                placeholder=" "
-              />
-              <label htmlFor="location">Location</label>
-              <div className="input-highlight"></div>
-            </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    required
+                    placeholder=" "
+                  />
+                  <label htmlFor="date">Event Date</label>
+                  <div className="input-highlight"></div>
+                </div>
 
-            <div className="form-group">
-              <input
-                type="text"
-                id="imageUrl"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-                required
-                placeholder=" "
-              />
-              <label htmlFor="imageUrl">Image URL</label>
-              <div className="input-highlight"></div>
-            </div>
+                <div className="form-group">
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    required
+                    placeholder=""
+                  />
+                  <label htmlFor="price">Price ($)</label>
+                  <div className="input-highlight"></div>
+                </div>
+              </div>
 
-            <button type="submit" className="submit-button">
-              <span>Create Event</span>
-              <div className="button-effect"></div>
-            </button>
-          </form>
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                  placeholder=" "
+                />
+                <label htmlFor="location">Location</label>
+                <div className="input-highlight"></div>
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="imageUrl"
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleChange}
+                  required
+                  placeholder=" "
+                />
+                <label htmlFor="imageUrl">Image URL</label>
+                <div className="input-highlight"></div>
+              </div>
+
+              <button type="submit" className="submit-button">
+                <span>Create Event</span>
+                <div className="button-effect"></div>
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

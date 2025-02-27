@@ -5,11 +5,13 @@ import YourEventsReview from "../Component/YourEventsReview";
 import { auth, db } from "../Component/firebase.js";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom"; // ✅ Redirect ke liye useNavigate()
+import Loader from "../Component/Loader"; // ✅ Import Loader
 import "../Style/Profile.css"
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("events");
   const [userDetails, setUserDetails] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ Loader state
   const navigate = useNavigate(); // ✅ Use navigate instead of window.location
 
   useEffect(() => {
@@ -24,6 +26,7 @@ const Profile = () => {
       } else {
         console.log("User not logged in");
       }
+      setLoading(false); // ✅ Hide loader once data is fetched
     };
 
     fetchUserData();
@@ -37,6 +40,8 @@ const Profile = () => {
       console.error("Error logging out:", error.message);
     }
   }
+
+  if (loading) return <Loader />; // ✅ Show Loader while data is loading
 
   return (
     <div className="profile-container">

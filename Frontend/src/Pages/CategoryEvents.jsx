@@ -3,6 +3,7 @@ import { FaClock, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import "../Style/Events.css";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../services/api";
+import Loader from "../Component/Loader";
 
 const CategoryEvents = () => {
   const { category } = useParams(); // Fixed: Using 'category' to match the route param
@@ -38,7 +39,7 @@ const CategoryEvents = () => {
     <div className="events-container">
       <h1 className="events-title">{category} Events</h1>
       {loading ? (
-        <p className="loading">Loading events...</p>
+        <Loader />
       ) : (
         <div className="events-list">
           {events.length > 0 && !events.message ? (
