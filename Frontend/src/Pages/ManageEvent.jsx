@@ -4,8 +4,9 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../services/api";
 import Modal from "react-modal";
+import Loader from "../Component/Loader"; // Import Loader
 import "../Style/ManageEvent.css";
-import { getAuth, onAuthStateChanged } from "firebase/auth"; // Add Firebase auth imports
+import { getAuth, onAuthStateChanged } from "firebase/auth"; 
 
 Modal.setAppElement("#root");
 
@@ -15,6 +16,7 @@ const ManageEvent = () => {
   const [event, setEvent] = useState(null);
   const [registeredUsers, setRegisteredUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // Loader state
   const [formData, setFormData] = useState({
     title: "",
     shortDescription: "",
@@ -24,17 +26,15 @@ const ManageEvent = () => {
     imageUrl: "",
     price: "",
   });
-  // Add state for the current user
+
   const [user, setUser] = useState(null);
 
-  // Firebase auth listener to get the current user
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
 
-    // Cleanup subscription
     return () => unsubscribe();
   }, []);
 
@@ -45,7 +45,6 @@ const ManageEvent = () => {
         setEvent(eventResponse.data);
         setFormData(eventResponse.data);
 
-        // Only fetch registered users if the current user is the host
         if (user && eventResponse.data.createdByEmail === user.email) {
           const usersResponse = await api.get(`/registeredUsers/${id}`);
           setRegisteredUsers(usersResponse.data);
@@ -53,10 +52,13 @@ const ManageEvent = () => {
       } catch (error) {
         console.error("Error fetching event and registered users:", error);
         toast.error("Failed to load data");
+      } finally {
+        setLoading(false); // Hide loader once data is loaded
       }
     };
+    
     fetchEventAndUsers();
-  }, [id, user]); // Add user to dependency array to refetch when user changes
+  }, [id, user]); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,7 +92,7 @@ const ManageEvent = () => {
     }
   };
 
-  if (!event) return <p>Loading event details...</p>;
+  if (loading) return <Loader />; // Show Loader while data is loading
 
   return (
     <div className="manage-event-container">
@@ -114,7 +116,6 @@ const ManageEvent = () => {
         </div>
       </div>
 
-      {/* ✅ Registered Users Section (only visible to host) */}
       {user && event.createdByEmail === user.email && (
         <div className="registered-users">
           <h3>Registered Users</h3>

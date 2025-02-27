@@ -14,10 +14,13 @@ function Register() {
   const [password, setPassword] = useState("");
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -33,22 +36,21 @@ function Register() {
         await sendEmailVerification(user);
         toast.success("Verification email sent! Please check your inbox.", { position: "top-center" });
 
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+        setTimeout(() => { navigate("/login"); }, 3000);
       }
     } catch (error) {
       toast.error(error.message, { position: "bottom-center" });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleSignup = async () => {
-    // Use the googleLogin function with isRegistration=true
+    setLoading(true);
     const user = await googleLogin(true);
     
     if (user) {
       try {
-        // Create user document in Firestore
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,
           firstName: user.displayName ? user.displayName.split(' ')[0] : "",
@@ -57,14 +59,13 @@ function Register() {
         });
         
         toast.success("Account created successfully!", { position: "top-center" });
-        
-        setTimeout(() => {
-          window.location.href = "/profile";
-        }, 2000);
+
+        setTimeout(() => { window.location.href = "/profile"; }, 2000);
       } catch (error) {
         toast.error("Error creating account: " + error.message, { position: "top-center" });
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -98,14 +99,16 @@ function Register() {
             <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
           </div>
 
-          <button type="submit" className="auth-button">Create Account</button>
+          <button type="submit" className="auth-button" disabled={loading}>
+            {loading ? "Creating Account..." : "Create Account"}
+          </button>
 
           <div className="auth-divider">
             <span>or sign up with</span>
           </div>
 
-          <button onClick={handleGoogleSignup} className="auth-button google-signin">
-            Sign Up with Google
+          <button onClick={handleGoogleSignup} className="auth-button google-signin" disabled={loading}>
+            {loading ? "Processing..." : "Sign Up with Google"}
           </button>
 
           <p className="auth-redirect">

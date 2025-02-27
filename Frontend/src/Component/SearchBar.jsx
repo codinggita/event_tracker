@@ -11,7 +11,7 @@ const SearchBar = () => {
         if (searchQuery.trim() !== "") {
             navigate(`/searchResults?q=${searchQuery}`);
         }
-    };
+    }; 
 
     return (
         <div className="search-bar">

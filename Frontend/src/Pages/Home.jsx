@@ -3,7 +3,6 @@ import { useScroll, useTransform } from "framer-motion";
 import "../Style/Home.css";
 import api from "../services/api"; // Ensure correct path
 import { useNavigate } from "react-router-dom";
-import Nav from "../Component/Nav";  // Importing your custom Nav component
 import Banner from "../Component/Banner";
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/css';
@@ -11,6 +10,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
+import Footer from "../Component/Footer"
 
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
 
@@ -61,7 +61,6 @@ const Home = () => {
 
   return (
     <>
-      <Nav /> {/* Include the Navbar here */}
      <Banner />
       <div className="text-container">
         <div className="header">
@@ -190,6 +189,7 @@ const Home = () => {
         </div>
       </Swiper>
 </div>
+
     </>
   );
 };

@@ -19,12 +19,7 @@ const Banner = () => {
   };
 
   const handleExploreEvents = () => {
-    const auth = getAuth();
-    if (auth.currentUser) {
       navigate("/events");
-    } else {
-      toast.warn("Please log in to explore an event!", { position: "top-center", autoClose: 3000 });
-    }
   };
 
   return (

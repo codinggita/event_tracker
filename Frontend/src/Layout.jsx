@@ -11,18 +11,20 @@ import Register from "./Component/Register";
 import ManageEvent from "./Pages/ManageEvent";
 import SearchResults from "./Pages/SearchResults";
 import CategoryEvents from "./Pages/CategoryEvents";
+import Footer from "./Component/Footer";
 
 function Layout() {
   const location = useLocation();
+  const hideNavFooter = ["/login", "/register"].includes(location.pathname); // Hide on login & register pages
 
   return (
     <>
+      {!hideNavFooter && <Nav />} 
 
-      <Nav /> 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />  {/* ✅ Fix: Added Login Route */}
-        <Route path="/register" element={<Register />} />  {/* ✅ Fix: Added Register Route */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/events" element={<Events />} />
         <Route path="/eventDetail/:id" element={<EventDetail />} />
@@ -31,6 +33,8 @@ function Layout() {
         <Route path="/searchResults" element={<SearchResults />} />  
         <Route path="/category/:category" element={<CategoryEvents />} />
       </Routes>
+
+      {!hideNavFooter && <Footer />}
     </>
   );
 }

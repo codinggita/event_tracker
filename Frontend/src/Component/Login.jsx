@@ -11,9 +11,11 @@ import "../Style/Auth.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -21,6 +23,7 @@ function Login() {
 
       if (!user.emailVerified) {
         toast.error("Email not verified! Please check your inbox.", { position: "top-center" });
+        setLoading(false);
         return;
       }
 
@@ -36,20 +39,21 @@ function Login() {
       }, 10 * 60 * 1000);
 
       toast.success("User logged in Successfully", { position: "top-center" });
-      window.location.href = "/";
+      setTimeout(() => { window.location.href = "/"; }, 2000);
     } catch (error) {
       toast.error(error.message, { position: "bottom-center" });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    // Using the exported googleLogin function with isRegistration=false
+    setLoading(true);
     const user = await googleLogin(false);
-    
     if (user) {
-      // Successfully logged in and user exists
-      // Note: The redirect is already handled in googleLogin function
+      toast.success("Google Sign-In Successful!", { position: "top-center" });
     }
+    setLoading(false);
   };
 
   return (
@@ -73,16 +77,16 @@ function Login() {
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
 
-          <button type="submit" className="auth-button">
-            Sign In
+          <button type="submit" className="auth-button" disabled={loading}>
+            {loading ? "Signing In..." : "Sign In"}
           </button>
 
           <div className="auth-divider">
             <span>or continue with</span>
           </div>
 
-          <button onClick={handleGoogleSignIn} className="auth-button google-signin">
-            Sign In with Google
+          <button onClick={handleGoogleSignIn} className="auth-button google-signin" disabled={loading}>
+            {loading ? "Processing..." : "Sign In with Google"}
           </button>
 
           <p className="auth-redirect">

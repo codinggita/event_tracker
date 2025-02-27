@@ -3,9 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaClock, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import "../Style/Events.css"; // ✅ Reuse Events CSS
 import api from "../services/api";
+import Loader from "../Component/Loader"; // ✅ Import Loader
 
 const SearchResults = () => {
     const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true); // ✅ Loader state
     const location = useLocation();
     const navigate = useNavigate();
     const query = new URLSearchParams(location.search).get("q");
@@ -18,6 +20,7 @@ const SearchResults = () => {
             } catch (error) {
                 console.error("Error fetching search results:", error);
             }
+            setLoading(false); // ✅ Hide loader once data is fetched
         };
 
         fetchSearchResults();
@@ -26,6 +29,8 @@ const SearchResults = () => {
     const handleViewDetail = (eventId) => {
         navigate(`/eventDetail/${eventId}`);
     };
+
+    if (loading) return <Loader />; // ✅ Show Loader while data is loading
 
     return (
         <div className="events-container">
