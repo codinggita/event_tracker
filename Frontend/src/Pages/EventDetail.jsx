@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { BsCalendarEvent, BsGeoAlt, BsX, BsSend } from "react-icons/bs";
@@ -8,7 +8,8 @@ import "../Style/EventDetail.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from "../Component/Loader";
+import Loader from "../Component/Loader"; // Import Loader Component
+import { useNavigate } from "react-router-dom";
 
 const EventDetail = () => {
   const { id } = useParams();
@@ -22,37 +23,42 @@ const EventDetail = () => {
     message: "",
   });
 
-  // Firebase user state (optimized)
+  // Firebase user state
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
+  // Firebase auth listener
   useEffect(() => {
     const auth = getAuth();
-    return onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
+
+    return () => unsubscribe();
   }, []);
 
-  // Fetch Event Details (Memoized for Optimization)
-  const fetchEventDetail = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await api.get(`eventDetail/${id}`);
-      setEvent(response.data);
-    } catch (error) {
-      setError(error.response?.data?.message || "Failed to load event details");
-    } finally {
-      setLoading(false);
-    }
-  }, [id]);
-
   useEffect(() => {
+    const fetchEventDetail = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await api.get(`eventDetail/${id}`);
+        setEvent(response.data);
+      } catch (error) {
+        setError(error.response?.data?.message || "Failed to load event details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (id) {
       fetchEventDetail();
     }
-  }, [id, fetchEventDetail]);
+  }, [id]);
 
   const handleQuerySubmit = async (e) => {
     e.preventDefault();
+
     if (!event?.createdByEmail) {
       alert("Host email not found!");
       return;
@@ -60,10 +66,10 @@ const EventDetail = () => {
 
     const emailParams = {
       name: formData.name,
-      from_email: user?.email,
+      from_email: user.email,
       message: formData.message,
       to_email: event.createdByEmail,
-      reply_to: user?.email,
+      reply_to: user.email,
     };
 
     try {
@@ -102,10 +108,33 @@ const EventDetail = () => {
     }
   };
 
-  // Show Loader when fetching data
-  if (loading) return <Loader />;
-  if (error) return <div className="error">Error: {error}</div>;
-  if (!event) return <div className="error">Event not found</div>;
+  const handleCheckout = () => {
+    if (!user) {
+      toast.error("Please login to proceed with checkout.");
+      return;
+    }
+  
+    navigate("/checkout", {
+      state: {
+        eventId: id,
+        title: event.title,
+        imageUrl: event.imageUrl,
+        price: event.price,
+      },
+    });
+  };
+  // Display Loader while fetching data
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
+
+  if (!event) {
+    return <div className="error">Event not found</div>;
+  }
 
   return (
     <div className="event-page">
@@ -193,10 +222,63 @@ const EventDetail = () => {
           <button className="query-button" onClick={() => setShowQueryForm(true)}>
             Have a Question?
           </button>
+
+          <button className="checkout-button" onClick={handleCheckout}  >
+             <p>Checkout</p>
+          </button>
         </div>
       </div>
 
-      {/* Toast Notifications */}
+      {/* Query Form Modal */}
+      {showQueryForm && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-button" onClick={() => setShowQueryForm(false)}>
+              <BsX size={24} />
+            </button>
+
+            <h2>Send Your Query</h2>
+
+            <form onSubmit={handleQuerySubmit} className="query-form">
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <textarea
+                  placeholder="Message"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" className="submit-button">
+                <BsSend className="icon" />
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Container for notifications */}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );

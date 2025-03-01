@@ -139,18 +139,19 @@
 }
 
 /* Event Details */
-.event-details {
+.event-details1 {
   margin-bottom: 20px;
 }
 
-.event-creator,
-.event-location {
+.event-creator1,
+.event-location1 {
   display: flex;
   align-items: center;
-  gap: 8px;
+  margin-top: 1em;
   font-size: 14px;
   color: #b0b0b0;
   margin-bottom: 8px;
+  gap: 10px;
 }
 
 /* View Detail Button */

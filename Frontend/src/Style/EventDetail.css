@@ -579,6 +579,51 @@ input {
   font-weight: 600;
 }
 
+.checkout-button {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(236, 72, 153, 0.3);
+  position: relative;
+  z-index: 1;
+  padding: 1.5em;
+  width: 17em;
+  border-radius: 1em;
+  margin-top: 1.6em;
+}
+
+.checkout-button p{
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.checkout-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #ec4899, #8b5cf6);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+.checkout-button:hover::before {
+  opacity: 1;
+  border-radius: 1em;
+  cursor: pointer;
+}
+
+.checkout-button:hover {
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2);
+  border-radius: 1em;
+  cursor: pointer;
+}
+
+
 /* Animations */
 @keyframes titleGradient {
   0% { background-position: 0% 50%; }

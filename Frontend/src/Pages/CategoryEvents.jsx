@@ -56,13 +56,13 @@ const CategoryEvents = () => {
                     <h2 className="event-title">{event.title}</h2>
                     <p className="event-description1">{event.shortDescription}</p>
                     <hr className="divider" />
-                    <div className="event-details">
+                    <div className="event-details1">
                       <span className="event-creator">
                         <FaUsers className="event-icon" /> by {event.createdByEmail || "Unknown User"}
                       </span>
-                      <span className="event-location">
+                      <p className="event-location">
                         <FaMapMarkerAlt className="event-icon" /> {event.location}
-                      </span>
+                      </p>
                     </div>
                     <button 
                       className="view-detail-button"

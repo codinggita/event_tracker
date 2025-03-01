@@ -12,6 +12,7 @@ import ManageEvent from "./Pages/ManageEvent";
 import SearchResults from "./Pages/SearchResults";
 import CategoryEvents from "./Pages/CategoryEvents";
 import Footer from "./Component/Footer";
+import Checkout from "./Pages/Checkout"
 
 function Layout() {
   const location = useLocation();
@@ -32,6 +33,7 @@ function Layout() {
         <Route path="/manage/:id" element={<ManageEvent />} />
         <Route path="/searchResults" element={<SearchResults />} />  
         <Route path="/category/:category" element={<CategoryEvents />} />
+        <Route path="/checkout" element={<Checkout />} /> 
       </Routes>
 
       {!hideNavFooter && <Footer />}
