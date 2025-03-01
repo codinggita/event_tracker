@@ -45,7 +45,7 @@ const Events = () => {
               <div className="event-content">
                 <div className="event-info">
                   <div className="event-header">
-                    <FaClock className="event-icon" />
+                    <FaClock className="event-icon1" />
                     <span className="event-time">{event.time}</span>
                     <span className="status-badge">Going</span>
                   </div>
@@ -53,13 +53,13 @@ const Events = () => {
                   <h2 className="event-title">{event.title}</h2>
                   <p className="event-description1">{event.shortDescription}</p>
                   <hr className="divider" />
-                  <div className="event-details">
-                    <span className="event-creator">
-                      <FaUsers className="event-icon" /> by {event.createdByEmail || "Unknown User"}
+                  <div className="event-details1">
+                    <span className="event-creator1">
+                      <FaUsers className="event-icon1" /> by {event.createdByEmail || "Unknown User"}
                     </span>
-                    <span className="event-location">
-                      <FaMapMarkerAlt className="event-icon" /> {event.location}
-                    </span>
+                    <p className="event-location1">
+                      <FaMapMarkerAlt className="event-icon1" /> {event.location}
+                    </p>
                   </div>
                   <button 
                     className="view-detail-button"
