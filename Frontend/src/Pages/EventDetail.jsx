@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, Suspense } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { BsCalendarEvent, BsGeoAlt, BsX, BsSend } from "react-icons/bs";
 import { BiRupee } from "react-icons/bi";
@@ -8,8 +8,147 @@ import "../Style/EventDetail.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from "../Component/Loader"; // Import Loader Component
-import { useNavigate } from "react-router-dom";
+import Loader from "../Component/Loader";
+
+// Separate component for the query form modal to reduce initial bundle size
+const QueryFormModal = ({ showQueryForm, setShowQueryForm, formData, setFormData, handleQuerySubmit }) => (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <button className="close-button" onClick={() => setShowQueryForm(false)}>
+        <BsX size={24} />
+      </button>
+
+      <h2>Send Your Query</h2>
+
+      <form onSubmit={handleQuerySubmit} className="query-form">
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <input
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <textarea
+            placeholder="Message"
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" className="submit-button">
+          <BsSend className="icon" />
+          Send Message
+        </button>
+      </form>
+    </div>
+  </div>
+);
+
+// Separate component for event details to enable better performance
+const EventDetails = ({ event, handleRegister, handleCheckout, setShowQueryForm }) => (
+  <>
+    <div className="hero">
+      <div className="hero-image-container">
+        <img
+          src={event.imageUrl}
+          alt={event.title}
+          className="hero-image"
+          loading="lazy"
+          onError={(e) => {
+            e.target.src = "https://images.unsplash.com/photo-1492684223066-81342ee5ff30";
+          }}
+        />
+        <div className="hero-overlay"></div>
+      </div>
+      <h1 className="hero-title">{event.title}</h1>
+    </div>
+
+    <div className="content-wrapper">
+      <div className="main-content">
+        <div className="about-section">
+          <h2>About the Event</h2>
+          <p className="short-description">{event.shortDescription}</p>
+          <p className="long-description">{event.longDescription}</p>
+        </div>
+
+        <div className="details-grid">
+          <div className="detail-card">
+            <BsCalendarEvent className="icon" />
+            <div className="detail-info">
+              <h3>Date & Time</h3>
+              <p>{event.date}</p>
+            </div>
+          </div>
+
+          <div className="detail-card">
+            <BsGeoAlt className="icon" />
+            <div className="detail-info">
+              <h3>Location</h3>
+              <p>{event.location}</p>
+            </div>
+          </div>
+
+          <div className="detail-card">
+            <BiRupee className="icon" />
+            <div className="detail-info">
+              <h3>Price</h3>
+              <p>₹{event.price}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="sidebar">
+        <div className="host-card">
+          <h2>Event Host</h2>
+          <div className="host-info">
+            <div className="host-avatar">
+              <img
+                src={event.hostAvatar || "https://images.unsplash.com/photo-1633332755192-727a05c4013d"}
+                alt={event.createdByEmail}
+                loading="lazy"
+                onError={(e) => {
+                  e.target.src = "https://images.unsplash.com/photo-1633332755192-727a05c4013d";
+                }}
+              />
+            </div>
+            <div>
+              <h3>{event.createdByEmail}</h3>
+              <p>Host</p>
+            </div>
+          </div>
+        </div>
+
+        <button className="register-button" onClick={handleRegister}>
+          Register for Event
+        </button>
+
+        <button className="query-button" onClick={() => setShowQueryForm(true)}>
+          Have a Question?
+        </button>
+
+        <button className="checkout-button" onClick={handleCheckout}>
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </>
+);
 
 const EventDetail = () => {
   const { id } = useParams();
@@ -23,11 +162,9 @@ const EventDetail = () => {
     message: "",
   });
 
-  // Firebase user state
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Firebase auth listener
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -38,29 +175,41 @@ const EventDetail = () => {
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchEventDetail = async () => {
       try {
         setLoading(true);
         setError(null);
         const response = await api.get(`eventDetail/${id}`);
-        setEvent(response.data);
+        if (isMounted) {
+          setEvent(response.data);
+        }
       } catch (error) {
-        setError(error.response?.data?.message || "Failed to load event details");
+        if (isMounted) {
+          setError(error.response?.data?.message || "Failed to load event details");
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     if (id) {
       fetchEventDetail();
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
   const handleQuerySubmit = async (e) => {
     e.preventDefault();
 
     if (!event?.createdByEmail) {
-      alert("Host email not found!");
+      toast.error("Host email not found!");
       return;
     }
 
@@ -117,13 +266,13 @@ const EventDetail = () => {
     navigate("/checkout", {
       state: {
         eventId: id,
-        title: event.title,
+        eventTitle: event.title,
         imageUrl: event.imageUrl,
         price: event.price,
       },
     });
   };
-  // Display Loader while fetching data
+
   if (loading) {
     return <Loader />;
   }
@@ -138,147 +287,25 @@ const EventDetail = () => {
 
   return (
     <div className="event-page">
-      {/* Hero Section */}
-      <div className="hero">
-        <div className="hero-image-container">
-          <img
-            src={event.imageUrl}
-            alt={event.title}
-            className="hero-image"
-            loading="lazy" // Optimize Image Loading
-            onError={(e) => {
-              e.target.src = "https://images.unsplash.com/photo-1492684223066-81342ee5ff30";
-            }}
+      <Suspense fallback={<Loader />}>
+        <EventDetails 
+          event={event}
+          handleRegister={handleRegister}
+          handleCheckout={handleCheckout}
+          setShowQueryForm={setShowQueryForm}
+        />
+        
+        {showQueryForm && (
+          <QueryFormModal
+            showQueryForm={showQueryForm}
+            setShowQueryForm={setShowQueryForm}
+            formData={formData}
+            setFormData={setFormData}
+            handleQuerySubmit={handleQuerySubmit}
           />
-          <div className="hero-overlay"></div>
-        </div>
-        <h1 className="hero-title">{event.title}</h1>
-      </div>
+        )}
+      </Suspense>
 
-      {/* Content Section */}
-      <div className="content-wrapper">
-        {/* Main Content */}
-        <div className="main-content">
-          <div className="about-section">
-            <h2>About the Event</h2>
-            <p className="short-description">{event.shortDescription}</p>
-            <p className="long-description">{event.longDescription}</p>
-          </div>
-
-          {/* Event Details Grid */}
-          <div className="details-grid">
-            <div className="detail-card">
-              <BsCalendarEvent className="icon" />
-              <div className="detail-info">
-                <h3>Date & Time</h3>
-                <p>{event.date}</p>
-              </div>
-            </div>
-
-            <div className="detail-card">
-              <BsGeoAlt className="icon" />
-              <div className="detail-info">
-                <h3>Location</h3>
-                <p>{event.location}</p>
-              </div>
-            </div>
-
-            <div className="detail-card">
-              <BiRupee className="icon" />
-              <div className="detail-info">
-                <h3>Price</h3>
-                <p>₹{event.price}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="sidebar">
-          <div className="host-card">
-            <h2>Event Host</h2>
-            <div className="host-info">
-              <div className="host-avatar">
-                <img
-                  src={event.hostAvatar || "https://images.unsplash.com/photo-1633332755192-727a05c4013d"}
-                  alt={event.createdByEmail}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.target.src = "https://images.unsplash.com/photo-1633332755192-727a05c4013d";
-                  }}
-                />
-              </div>
-              <div>
-                <h3>{event.createdByEmail}</h3>
-                <p>Host</p>
-              </div>
-            </div>
-          </div>
-
-          <button className="register-button" onClick={handleRegister}>
-            Register for Event
-          </button>
-
-          <button className="query-button" onClick={() => setShowQueryForm(true)}>
-            Have a Question?
-          </button>
-
-          <button className="checkout-button" onClick={handleCheckout}  >
-             <p>Checkout</p>
-          </button>
-        </div>
-      </div>
-
-      {/* Query Form Modal */}
-      {showQueryForm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-button" onClick={() => setShowQueryForm(false)}>
-              <BsX size={24} />
-            </button>
-
-            <h2>Send Your Query</h2>
-
-            <form onSubmit={handleQuerySubmit} className="query-form">
-              <div className="form-group">
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <textarea
-                  placeholder="Message"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                ></textarea>
-              </div>
-
-              <button type="submit" className="submit-button">
-                <BsSend className="icon" />
-                Send Message
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Toast Container for notifications */}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );

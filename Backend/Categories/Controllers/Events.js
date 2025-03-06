@@ -1,4 +1,6 @@
 import Event from "../Models/EventCard.js";
+import { createRazorpayInstance } from "../Config/razorpay.config.js";
+import crypto from "crypto";
 
 // ✅ Create Event
 export const createEvent = async (req, res) => {
@@ -149,3 +151,61 @@ export const searchEvents = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+
+
+
+// Create Razorpay order
+export const createOrder = async (req, res) => {
+  try {
+    const { amount } = req.body; // Amount in rupees
+    const razorpay = createRazorpayInstance();
+
+    const options = {
+      amount: amount * 100, // Convert to paisa
+      currency: "INR",
+      receipt: `receipt_${Date.now()}`,
+    };
+
+    const order = await razorpay.orders.create(options);
+
+    res.json({
+      success: true,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+    });
+  } catch (error) {
+    console.error("Error creating Razorpay order:", error);
+    res.status(500).json({ success: false, message: "Failed to create order" });
+  }
+};
+
+// Verify payment after Razorpay callback
+export const verifyPayment = async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    
+    // Create signature using your secret key
+    const shasum = crypto.createHmac("sha256", "Uew5OFDPM3PjQ6TQRTyMr4MT");
+    shasum.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const digest = shasum.digest("hex");
+    
+    // Compare signatures
+    if (digest !== razorpay_signature) {
+      return res.status(400).json({ success: false, message: "Invalid payment" });
+    }
+    
+    // If signature matches, payment is successful
+    // Here you can save the payment details and ticket information to your database
+    
+    res.json({
+      success: true,
+      message: "Payment verified successfully",
+      paymentId: razorpay_payment_id,
+    });
+  } catch (error) {
+    console.error("Payment verification error:", error);
+    res.status(500).json({ success: false, message: "Verification failed" });
+  }
+};
+
