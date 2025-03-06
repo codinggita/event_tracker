@@ -1,0 +1,132 @@
+.success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 30px 10px;
+    background-color: #f5f5f5;
+  }
+  
+  .success-card {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+    text-align: center;
+  }
+  
+  .success-icon {
+    font-size: 80px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+  }
+  
+  .success-card h1 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 28px;
+  }
+  
+  .success-details {
+    margin-bottom: 30px;
+  }
+  
+  .confirmation-message {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 25px;
+  }
+  
+  .details-table {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .detail-row:last-child {
+    border-bottom: none;
+  }
+  
+  .detail-label {
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .detail-value {
+    color: #333;
+  }
+  
+  .receipt-info {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .primary-button,
+  .secondary-button {
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .primary-button {
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+  }
+  
+  .primary-button:hover {
+    background-color: #303f9f;
+  }
+  
+  .secondary-button {
+    background-color: transparent;
+    color: #3f51b5;
+    border: 1px solid #3f51b5;
+  }
+  
+  .secondary-button:hover {
+    background-color: #f0f3ff;
+  }
+  
+  @media (max-width: 600px) {
+    .success-card {
+      padding: 30px 20px;
+    }
+    
+    .success-icon {
+      font-size: 60px;
+    }
+    
+    .success-card h1 {
+      font-size: 24px;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+    }
+    
+    .primary-button,
+    .secondary-button {
+      width: 100%;
+    }
+  }

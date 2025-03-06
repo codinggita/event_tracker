@@ -17,12 +17,11 @@ const CreateEventForm = () => {
     category: "",
   });
 
-  const [loading, setLoading] = useState(true); // Initially loader show hoga
+  const [loading, setLoading] = useState(true);
 
-  // Page open hote hi 2.5 sec ke liye loader dikhana
   useEffect(() => {
     setTimeout(() => {
-      setLoading(false); // 2.5 sec baad loader hide hoga
+      setLoading(false);
     }, 2500);
   }, []);
 
@@ -33,8 +32,10 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Form submit karne ke baad loader dikhana
-
+    setLoading(true);
+    
+    console.log("Form Data Submitted:", formData);
+    
     setTimeout(async () => {
       try {
         const response = await api.post("createEvent", formData);
@@ -60,14 +61,14 @@ const CreateEventForm = () => {
           toast.error("Failed to create event. Try again!");
         }
       } finally {
-        setLoading(false); // Loader hide karna
+        setLoading(false);
       }
-    }, 2000); // 2 sec loader dikhane ke baad response handle karega
+    }, 2000);
   };
 
   return (
     <div className="create-event-container">
-      {loading && <Loader />} {/* Loader Centered */}
+      {loading && <Loader />}
       <div className="animated-background"></div>
       <ToastContainer theme="dark" />
       <div className="form-wrapper">
@@ -77,7 +78,7 @@ const CreateEventForm = () => {
             <div className="underline"></div>
           </div>
 
-          {!loading && ( // Jab tak loading true hai, form hide rahega
+          {!loading && (
             <form onSubmit={handleSubmit} className="form">
               <div className="form-group">
                 <input
@@ -136,34 +137,32 @@ const CreateEventForm = () => {
                 <div className="input-highlight"></div>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    required
-                    placeholder=" "
-                  />
-                  <label htmlFor="date">Event Date</label>
-                  <div className="input-highlight"></div>
-                </div>
+              <div className="form-group">
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  required
+                  placeholder=" "
+                />
+                <label htmlFor="date">Event Date</label>
+                <div className="input-highlight"></div>
+              </div>
 
-                <div className="form-group">
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    required
-                    placeholder=""
-                  />
-                  <label htmlFor="price">Price ($)</label>
-                  <div className="input-highlight"></div>
-                </div>
+              <div className="form-group">
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  placeholder=""
+                />
+                <label htmlFor="price">Price ($)</label>
+                <div className="input-highlight"></div>
               </div>
 
               <div className="form-group">
