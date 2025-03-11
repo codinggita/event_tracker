@@ -66,6 +66,18 @@ We will measure the project's success using:
 - 🌍 **Multi-language Support** - Expanding to global audiences.
 - 🔗 **Social Media Integration** - Seamless sharing and event promotion.
 
+## config.env file inside Data folder for Backend.
+### Keys :-
+- PORT
+- MONGO_URI
+- SMTP_HOST
+- SMTP_PORT
+- SMTP_USER
+- SMTP_PASS
+- BREVO_API_KEY
+- SMTP_SECURE
+- RAZORPAY_KEY_ID
+- RAZORPAY_KEY_SECRET
 ---
 
 ## 📜 License

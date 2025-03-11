@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaCamera, FaEnvelope, FaEdit, FaSignOutAlt, FaStar, FaClipboardList, FaMapMarkerAlt } from "react-icons/fa";
 import YourCreatedEvents from "../Component/YourCreatedEvents";
-import YourEventsReview from "../Component/YourEventsReview";
+import UserTickets from "../Component/UserTickets.jsx";
 import { auth, db } from "../Component/firebase.js";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom"; // ✅ Redirect ke liye useNavigate()
@@ -89,12 +89,12 @@ const Profile = () => {
             className={`tab-button ${activeTab === "curated" ? "active" : ""}`}
             onClick={() => setActiveTab("curated")}
           >
-            <FaClipboardList />Curated List
+            <FaClipboardList />Your Tickets
           </button>
         </div>
 
         <div className="tab-content">
-          {activeTab === "events" ? <YourCreatedEvents /> : <YourEventsReview />}
+          {activeTab === "events" ? <YourCreatedEvents /> : <UserTickets />}
         </div>
       </div>
     </div>
