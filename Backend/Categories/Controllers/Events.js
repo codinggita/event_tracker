@@ -1,6 +1,7 @@
 import Event from "../Models/EventCard.js";
 import { createRazorpayInstance } from "../Config/razorpay.config.js";
 import crypto from "crypto";
+import TicketPurchase from "../Models/Transaction.js";
 
 // ✅ Create Event
 export const createEvent = async (req, res) => {
@@ -159,15 +160,15 @@ export const createOrder = async (req, res) => {
   try {
     const { amount } = req.body; // Amount in rupees
     const razorpay = createRazorpayInstance();
-
+    
     const options = {
       amount: amount * 100, // Convert to paisa
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
     };
-
+    
     const order = await razorpay.orders.create(options);
-
+    
     res.json({
       success: true,
       orderId: order.id,
@@ -183,7 +184,25 @@ export const createOrder = async (req, res) => {
 // Verify payment after Razorpay callback
 export const verifyPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { 
+      razorpay_order_id, 
+      razorpay_payment_id, 
+      razorpay_signature,
+      eventId,
+      userId,
+      quantity,
+      amount,
+      eventTitle 
+    } = req.body;
+    
+    // Validate required fields
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || 
+        !eventId || !userId || !quantity || !amount || !eventTitle) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Missing required fields for payment verification" 
+      });
+    }
     
     // Create signature using your secret key
     const shasum = crypto.createHmac("sha256", "Uew5OFDPM3PjQ6TQRTyMr4MT");
@@ -195,17 +214,52 @@ export const verifyPayment = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid payment" });
     }
     
-    // If signature matches, payment is successful
-    // Here you can save the payment details and ticket information to your database
+    // Check if this payment is already saved (to prevent duplicates)
+    const existingPurchase = await TicketPurchase.findOne({ paymentId: razorpay_payment_id });
+    if (existingPurchase) {
+      return res.json({
+        success: true,
+        message: "Payment already verified",
+        paymentId: razorpay_payment_id
+      });
+    }
+    
+    // Save the ticket purchase to database
+    const ticketPurchase = new TicketPurchase({
+      userId,
+      eventId,
+      eventTitle,
+      quantity,
+      amount,
+      paymentId: razorpay_payment_id
+    });
+    
+    const savedPurchase = await ticketPurchase.save();
+    console.log("Ticket purchase saved:", savedPurchase); // Debug log
     
     res.json({
       success: true,
       message: "Payment verified successfully",
       paymentId: razorpay_payment_id,
+      ticketId: savedPurchase._id
     });
   } catch (error) {
     console.error("Payment verification error:", error);
-    res.status(500).json({ success: false, message: "Verification failed" });
+    res.status(500).json({ success: false, message: "Verification failed", error: error.message });
   }
 };
 
+// Get user's ticket purchases
+export const getUserTickets = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    const tickets = await TicketPurchase.find({ userId })
+      .sort({ purchaseDate: -1 });
+    
+    res.json({ success: true, tickets });
+  } catch (error) {
+    console.error("Error fetching user tickets:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch tickets" });
+  }
+};
