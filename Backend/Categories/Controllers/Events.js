@@ -114,18 +114,30 @@ export const deleteEvent = async (req, res) => {
 // ✅ Search Events Controller
 export const searchEvents = async (req, res) => {
   try {
-      const query = req.query.q || ""; // Get search query
-      if (!query) return res.status(200).json({ events: [] }); // Return empty if no query
+      const query = req.query.q || ""; // Search query
+      const location = req.query.location || ""; // Location filter
 
-      const events = await Event.find({
-          title: { $regex: query, $options: "i" }, // Case-insensitive search
-      });
+      if (!query && !location) {
+        return res.status(200).json({ events: [] }); // Empty result if no query or location
+      }
 
+      const searchCriteria = {};
+
+      if (query) {
+        searchCriteria.title = { $regex: query, $options: "i" }; // Title search (case-insensitive)
+      }
+
+      if (location) {
+        searchCriteria.location = { $regex: location, $options: "i" }; // Location search (case-insensitive)
+      }
+
+      const events = await Event.find(searchCriteria);
       res.status(200).json({ events });
   } catch (error) {
+      console.error("Search error:", error);
       res.status(500).json({ message: "Error fetching search results", error });
   }
-};    
+};
 
 
  export const categoryEvents = async (req, res) => {
@@ -263,3 +275,4 @@ export const getUserTickets = async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch tickets" });
   }
 };
+
