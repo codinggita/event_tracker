@@ -4,14 +4,19 @@ import { auth, db } from "./firebase";
 import { toast, ToastContainer } from "react-toastify";
 import { doc, getDoc } from "firebase/firestore";
 import SignInwithGoogle, { googleLogin } from "./signInWithGoogle";
-import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
+import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import "../Style/Auth.css";
+import { useNavigate, useLocation } from "react-router-dom"; // Added imports
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  const navigate = useNavigate(); // Added for navigation
+  const location = useLocation(); // Added to get query params
+  const redirect = new URLSearchParams(location.search).get("redirect"); // Get redirect URL from query
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +44,9 @@ function Login() {
       }, 10 * 60 * 1000);
 
       toast.success("User logged in Successfully", { position: "top-center" });
-      setTimeout(() => { window.location.href = "/"; }, 2000);
+      setTimeout(() => {
+        navigate(redirect || "/"); // Redirect to approval page or home
+      }, 2000);
     } catch (error) {
       toast.error(error.message, { position: "bottom-center" });
     } finally {
@@ -52,6 +59,9 @@ function Login() {
     const user = await googleLogin(false);
     if (user) {
       toast.success("Google Sign-In Successful!", { position: "top-center" });
+      setTimeout(() => {
+        navigate(redirect || "/"); // Redirect after Google Sign-In
+      }, 2000);
     }
     setLoading(false);
   };
@@ -69,12 +79,24 @@ function Login() {
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <FaEnvelope className="input-icon" />
-            <input type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
             <FaLock className="input-icon" />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           <button type="submit" className="auth-button" disabled={loading}>
@@ -85,7 +107,11 @@ function Login() {
             <span>or continue with</span>
           </div>
 
-          <button onClick={handleGoogleSignIn} className="auth-button google-signin" disabled={loading}>
+          <button
+            onClick={handleGoogleSignIn}
+            className="auth-button google-signin"
+            disabled={loading}
+          >
             {loading ? "Processing..." : "Sign In with Google"}
           </button>
 
