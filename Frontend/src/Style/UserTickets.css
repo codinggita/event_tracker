@@ -197,3 +197,109 @@
     max-width: 100%;
   }
 }
+
+/* Add this to your UserTickets.css file */
+
+/* Modern resell button styling */
+.rt-resell-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Button hover effect */
+.rt-resell-action-btn:hover {
+  background-color: #2d2d2d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active state when clicked */
+.rt-resell-action-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button icon styling */
+.rt-resell-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Subtle ripple effect */
+.rt-resell-action-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+/* Ripple animation on click */
+.rt-resell-action-btn:focus:not(:active)::after {
+  animation: rt-ripple 1s ease-out;
+}
+
+/* Color change on hover for the icon */
+.rt-resell-action-btn:hover .rt-resell-icon {
+  color: #6366f1;
+}
+
+/* Animation for the ripple effect */
+@keyframes rt-ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40, 40);
+  }
+}
+
+/* If you're using a dark theme for your entire app, add these for proper contrast */
+.ticket-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Make sure the buttons in the footer have equal width */
+.ticket-footer button {
+  flex: 1;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 576px) {
+  .ticket-footer {
+    flex-direction: column;
+  }
+  
+  .rt-resell-action-btn {
+    width: 100%;
+  }
+}
