@@ -227,3 +227,38 @@
     font-size: 1rem;
   }
 }
+
+.nav-button.resell-btn.improved {
+  background: linear-gradient(135deg, #8a2be2, #4b0082);
+  border: none;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(138, 43, 226, 0.3);
+}
+
+.nav-button.resell-btn.improved:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(138, 43, 226, 0.4);
+}
+
+.nav-button.resell-btn.improved:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(138, 43, 226, 0.3);
+}
+
+.nav-button.resell-btn.improved::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.nav-button.resell-btn.improved:hover::before {
+  left: 100%;
+}

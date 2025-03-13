@@ -53,13 +53,17 @@ export default function Navbar() {
         </div>
 
         {/* ✅ Show SearchBar only if user is logged in */}
-        {user && <SearchBar />}  
+        {user && <SearchBar />}
 
         <div className="navbar-right">
           {user ? (
             <div className="auth-buttons">
               <button className="nav-button events-btn" onClick={() => navigate("/events")}>
                 Events
+              </button>
+              {/* Added Resell Button */}
+              <button className="nav-button resell-btn" onClick={() => navigate("/resale-tickets")}>
+                Resell
               </button>
               <div className="avatar-container">
                 <img
