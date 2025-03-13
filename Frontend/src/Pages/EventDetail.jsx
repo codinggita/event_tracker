@@ -1,5 +1,5 @@
 import { useEffect, useState, Suspense } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { BsCalendarEvent, BsGeoAlt, BsX, BsSend } from "react-icons/bs";
 import { BiRupee } from "react-icons/bi";
@@ -60,7 +60,7 @@ const QueryFormModal = ({ showQueryForm, setShowQueryForm, formData, setFormData
 );
 
 // Separate component for event details to enable better performance
-const EventDetails = ({ event, handleRegister, handleCheckout, setShowQueryForm }) => (
+const EventDetails = ({ event, effectivePrice, handleRegister, handleCheckout, setShowQueryForm }) => (
   <>
     <div className="hero">
       <div className="hero-image-container">
@@ -107,7 +107,7 @@ const EventDetails = ({ event, handleRegister, handleCheckout, setShowQueryForm 
             <BiRupee className="icon" />
             <div className="detail-info">
               <h3>Price</h3>
-              <p>₹{event.price}</p>
+              <p>₹{effectivePrice}</p>
             </div>
           </div>
         </div>
@@ -164,6 +164,8 @@ const EventDetail = () => {
 
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation(); // Added for accessing resalePrice and ticketId
+  const { resalePrice, ticketId } = location.state || {}; // Extract resalePrice and ticketId from navigation state
 
   useEffect(() => {
     const auth = getAuth();
@@ -263,15 +265,20 @@ const EventDetail = () => {
       return;
     }
   
+    // Updated to handle both normal and resale tickets
     navigate("/checkout", {
       state: {
         eventId: id,
         eventTitle: event.title,
         imageUrl: event.imageUrl,
-        price: event.price,
+        price: resalePrice || event.price, // Use resalePrice if available, else event.price
+        ticketId: ticketId || undefined, // Pass ticketId for resale purchase
       },
     });
   };
+
+  // Updated to use resalePrice if available
+  const effectivePrice = resalePrice || (event ? event.price : "N/A");
 
   if (loading) {
     return <Loader />;
@@ -290,6 +297,7 @@ const EventDetail = () => {
       <Suspense fallback={<Loader />}>
         <EventDetails 
           event={event}
+          effectivePrice={effectivePrice}
           handleRegister={handleRegister}
           handleCheckout={handleCheckout}
           setShowQueryForm={setShowQueryForm}
