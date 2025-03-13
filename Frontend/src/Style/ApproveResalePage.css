@@ -1,0 +1,204 @@
+/* ApproveResalePage.css - Modern UI for the approval page */
+.arp__page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background-color: var(--rst-bg-color, #0f172a);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--rst-text-primary, #f1f5f9);
+  }
+  
+  .arp__content-wrapper {
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .arp__card {
+    background-color: var(--rst-card-bg, #1e293b);
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--rst-border-color, #334155);
+    animation: arp-reveal 0.5s ease-out;
+  }
+  
+  @keyframes arp-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .arp__status-container {
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .arp__status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .arp__success-icon {
+    color: #10b981;
+    background-color: rgba(16, 185, 129, 0.1);
+  }
+  
+  .arp__error-icon {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+  
+  .arp__loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--rst-primary-light, rgba(129, 140, 248, 0.1));
+    margin-bottom: 1.5rem;
+  }
+  
+  .arp__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(129, 140, 248, 0.3);
+    border-top-color: var(--rst-primary-color, #818cf8);
+    border-radius: 50%;
+    animation: arp-spin 1s linear infinite;
+  }
+  
+  @keyframes arp-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .arp__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--rst-text-primary, #f1f5f9);
+    margin: 0 0 1rem 0;
+  }
+  
+  .arp__message {
+    font-size: 1rem;
+    color: var(--rst-text-secondary, #94a3b8);
+    margin: 0 0 2rem 0;
+    line-height: 1.6;
+  }
+  
+  .arp__button-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+  
+  .arp__btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .arp__btn-primary {
+    background-color: var(--rst-primary-color, #818cf8);
+    color: #f8fafc;
+  }
+  
+  .arp__btn-primary:hover {
+    background-color: var(--rst-primary-dark, #6366f1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  }
+  
+  .arp__btn-secondary {
+    background-color: transparent;
+    color: var(--rst-text-primary, #f1f5f9);
+    border: 1.5px solid var(--rst-border-color, #334155);
+  }
+  
+  .arp__btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--rst-text-secondary, #94a3b8);
+  }
+  
+  .arp__btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Button ripple effect */
+  .arp__btn:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+  }
+  
+  .arp__btn:active:after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+  }
+  
+  /* Focus outlines for accessibility */
+  .arp__btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+  }
+  
+  /* Enhanced outline for accessibilty */
+  .arp__btn:focus-visible {
+    outline: 2px solid var(--rst-primary-color, #818cf8);
+    outline-offset: 2px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .arp__button-container {
+      flex-direction: column;
+    }
+    
+    .arp__status-container {
+      padding: 2rem 1.5rem;
+    }
+  }
+  
