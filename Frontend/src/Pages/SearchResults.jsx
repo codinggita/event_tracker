@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaClock, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
@@ -10,12 +11,18 @@ const SearchResults = () => {
     const [loading, setLoading] = useState(true); // ✅ Loader state
     const location = useLocation();
     const navigate = useNavigate();
-    const query = new URLSearchParams(location.search).get("q");
+
+    // Extract search query and location from URL
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get("q") || "";
+    const locationQuery = queryParams.get("location") || "";
 
     useEffect(() => {
         const fetchSearchResults = async () => {
             try {
-                const response = await api.get(`/searchEvents?q=${query}`);
+                const response = await api.get(`/searchEvents`, {
+                    params: { q: searchQuery, location: locationQuery }
+                });
                 setEvents(response.data.events);
             } catch (error) {
                 console.error("Error fetching search results:", error);
@@ -24,7 +31,7 @@ const SearchResults = () => {
         };
 
         fetchSearchResults();
-    }, [query]);
+    }, [searchQuery, locationQuery]);
 
     const handleViewDetail = (eventId) => {
         navigate(`/eventDetail/${eventId}`);
@@ -34,7 +41,9 @@ const SearchResults = () => {
 
     return (
         <div className="events-container">
-            <h1 className="events-title">Search Results for "{query}"</h1>
+            <h1 className="events-title">
+                Search Results for "{searchQuery}" {locationQuery && `in ${locationQuery}`}
+            </h1>
             <div className="events-list">
                 {events.length > 0 ? (
                     events.map((event) => (
@@ -80,3 +89,5 @@ const SearchResults = () => {
 };
 
 export default SearchResults;
+
+

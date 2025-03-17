@@ -1,3 +1,4 @@
+
 .search-bar input{
   width: 20em;
   height: 2.5em;
@@ -19,3 +20,123 @@
     top: 24.5%;
     cursor: pointer;
 }
+=======
+
+
+/* ========================= */
+/* 🔍 Enhanced Search Bar CSS */
+/* ========================= */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Balanced spacing */
+  background-color: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 35px; /* Softer edges for better aesthetics */
+  padding: 8px 18px; /* Improved padding for touch devices */
+  width: 100%;
+  max-width: 500px; /* Optimal width for readability */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease-in-out;
+}
+
+.search-bar:hover {
+  box-shadow: 0 5px 15px #B388FF(0, 255, 255, 0.6); /* Brighter neon glow */
+  border-color:#B388FF;
+  transform: scale(1.03); /* Slight enlargement for emphasis */
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 8px 12px; /* Balanced padding for comfort */
+  font-size: 15px;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  transition: color 0.3s ease;
+}
+
+.search-bar input::placeholder {
+  color: #aaa;
+  font-style: italic;
+  font-size: 13px;
+}
+
+.search-bar input:focus {
+  border-bottom: 2px solid #B388FF; /* Neon glow focus effect */
+  outline: none;
+  color:#B388FF;
+  transform: scale(1.01); /* Slight scale-up on focus */
+}
+
+/* 🔎 Search Icon */
+.search-icone {
+  width: 22px;
+  height: 22px;
+  color: #B388FF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-icone:hover {
+  color: #ff00ff; /* Neon pink on hover */
+  transform: rotate(20deg) scale(1.2); /* Playful hover animation */
+}
+
+/* ========================= */
+/* 🌌 Futuristic Background  */
+/* ========================= */
+
+body.dark-mode {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); 
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* ========================= */
+/* 📱 Responsive Design */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .search-bar {
+      max-width: 100%;
+      border-radius: 30px;
+      padding: 6px 14px;
+  }
+
+  .search-bar input {
+      font-size: 14px;
+      padding: 6px 10px;
+  }
+
+  .search-icone {
+      width: 20px;
+      height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-bar {
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 25px;
+  }
+
+  .search-bar input {
+      font-size: 12px;
+      padding: 4px 8px;
+  }
+
+  .search-icone {
+      width: 18px;
+      height: 18px;
+  }
+}
+
