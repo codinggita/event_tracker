@@ -1,15 +1,14 @@
 // models/ticketPurchase.js
 import mongoose from "mongoose";
 
-const ticketPurchaseSchema = new mongoose.Schema({
+const { Schema } = mongoose; 
+
+const ticketPurchaseSchema = new Schema({
   userId: {
     type: String,
-    required: true,
+    required: false,
   },
-  eventId: {
-    type: String,
-    required: true,
-  },
+  eventId: { type: Schema.Types.ObjectId, ref: "Event", required: true },
   eventTitle: {
     type: String,
     required: true,
@@ -31,7 +30,29 @@ const ticketPurchaseSchema = new mongoose.Schema({
   purchaseDate: {
     type: Date,
     default: Date.now,
-  }
+  },
+  isForResale: {
+    type: Boolean,
+    default: false,
+  },
+  resalePrice: {
+    type: Number,
+    default: null,
+  },
+  resaleStatus: {
+    type: String,
+    enum: ["pending", "approved", "sold", "rejected"],
+    default: null,
+  },
+  originalOwnerId: {
+    type: String,
+    default: null,
+  },
+  resalePurchaseDate: {
+    type: Date,
+    default: null,
+  },
+  refundId: { type: String, default: null },
 });
 
 const TicketPurchase = mongoose.model("TicketPurchase", ticketPurchaseSchema);

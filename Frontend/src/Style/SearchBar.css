@@ -1,4 +1,27 @@
 
+.search-bar input{
+  width: 20em;
+  height: 2.5em;
+  position: relative;
+  margin-right: 23em;
+  border-radius: 40px;
+}
+.search-bar{
+  width: 55%;
+  position: relative;
+  left: -15px;
+}
+.search-icone{
+    width: 20px;
+    height: 20px;
+    color: rgb(156, 156, 156);
+    position: absolute;
+    left: 36.5%;
+    top: 24.5%;
+    cursor: pointer;
+}
+=======
+
 
 /* ========================= */
 /* 🔍 Enhanced Search Bar CSS */
@@ -116,3 +139,4 @@ body.dark-mode {
       height: 18px;
   }
 }
+

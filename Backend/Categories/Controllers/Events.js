@@ -1,5 +1,6 @@
 import Event from "../Models/EventCard.js";
 import { createRazorpayInstance } from "../Config/razorpay.config.js";
+import { createEmailTransporter } from "../Config/email.config.js";
 import crypto from "crypto";
 import TicketPurchase from "../Models/Transaction.js";
 
@@ -266,8 +267,11 @@ export const getUserTickets = async (req, res) => {
   try {
     const { userId } = req.params;
     
-    const tickets = await TicketPurchase.find({ userId })
-      .sort({ purchaseDate: -1 });
+    const tickets = await TicketPurchase.find({
+      userId, 
+      resaleStatus: { $ne: "approved" }, 
+      isForResale: { $ne: true }, 
+    }).sort({ purchaseDate: -1 });
     
     res.json({ success: true, tickets });
   } catch (error) {
@@ -275,4 +279,245 @@ export const getUserTickets = async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch tickets" });
   }
 };
+
+
+export const getTicketDetails = async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+    const ticket = await TicketPurchase.findById(ticketId);
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+    res.status(200).json(ticket); 
+  } catch (error) {
+    console.error("Error fetching ticket details:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+export const listTicketForResale = async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+    const { resalePrice } = req.body;
+
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+    if (!resalePrice || resalePrice <= 0) return res.status(400).json({ message: "Valid resale price is required" });
+
+    const ticket = await TicketPurchase.findById(ticketId);
+    if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+    if (ticket.userId !== req.user.uid) return res.status(403).json({ message: "You can only resell your own tickets" });
+    if (ticket.isForResale) return res.status(400).json({ message: "Ticket is already listed for resale" });
+
+    ticket.isForResale = true;
+    ticket.resalePrice = resalePrice;
+    ticket.resaleStatus = "pending";
+    ticket.originalOwnerId = req.user.uid;
+
+    await ticket.save();
+
+    const event = await Event.findById(ticket.eventId);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    const hostEmail = event.createdByEmail;
+    const transporter = createEmailTransporter();
+
+    // Generate approval/rejection links
+    const baseUrl = "http://localhost:5173"; // Frontend URL (adjust port if needed)
+    const approveLink = `${baseUrl}/tickets/${ticketId}/approve?action=approve`;
+    const rejectLink = `${baseUrl}/tickets/${ticketId}/approve?action=reject`;
+
+    const mailOptions = {
+      from: "tea01089@gmail.com",
+      to: hostEmail,
+      subject: "Ticket Resale Approval Request",
+      text: `A ticket (ID: ${ticketId}) for your event "${event.title}" has been listed for resale at ${resalePrice} INR.\n\n` +
+            `Click to Approve: ${approveLink}\n` +
+            `Click to Reject: ${rejectLink}`,
+      html: `
+        <p>A ticket (ID: <strong>${ticketId}</strong>) for your event "<strong>${event.title}</strong>" has been listed for resale at <strong>${resalePrice} INR</strong>.</p>
+        <p>Please approve or reject this request:</p>
+        <a href="${approveLink}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Approve</a>
+        <a href="${rejectLink}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">Reject</a>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`Approval email sent to ${hostEmail}`);
+
+    res.status(200).json({ message: "Ticket listed for resale and host notified", ticket });
+  } catch (error) {
+    console.error("Error listing ticket for resale:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getResaleTickets = async (req, res) => {
+  try {
+    const tickets = await TicketPurchase.find({ resaleStatus: "approved" }).populate({
+      path: "eventId",
+      select: "title imageUrl time location shortDescription createdByEmail",
+      model: "Event", 
+    });
+    res.status(200).json(tickets);
+  } catch (error) {
+    console.error("Error fetching resale tickets:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const approveResaleTicket = async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+    const action = req.query.action || req.body.action;
+
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+
+    const ticket = await TicketPurchase.findById(ticketId);
+    if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+
+    const event = await Event.findById(ticket.eventId);
+    if (!event || event.createdBy !== req.user.uid) {
+      return res.status(403).json({ message: "Only event host can approve resale" });
+    }
+
+    if (ticket.resaleStatus !== "pending") {
+      return res.status(400).json({ message: "Ticket is not pending approval" });
+    }
+
+    if (action === "approve") {
+      ticket.resaleStatus = "approved";
+
+      const razorpay = createRazorpayInstance();
+      const refundAmount = ticket.amount;
+      const paymentId = ticket.paymentId;
+
+      if (!paymentId) {
+        console.error("Payment ID missing for ticket:", ticketId);
+        return res.status(400).json({ message: "Payment ID not found" });
+      }
+
+      // Check if refund already processed
+      if (!ticket.refundId) {
+        try {
+          console.log("Initiating refund for payment:", paymentId, "Amount:", refundAmount);
+          const refund = await razorpay.payments.refund(paymentId, {
+            amount: refundAmount * 100,
+            notes: { reason: "Ticket approved for resale" },
+          });
+          ticket.refundId = refund.id;
+          console.log("Refund successful:", refund);
+        } catch (refundError) {
+          console.error("Refund failed:", refundError);
+          return res.status(500).json({ message: "Refund processing failed", error: refundError.message });
+        }
+      } else {
+        console.log("Refund already processed for payment:", paymentId, "Refund ID:", ticket.refundId);
+      }
+
+      // Remove ticket from original owner
+      ticket.userId = null; // Now works with updated schema
+      ticket.originalOwnerId = ticket.originalOwnerId || ticket.userId; // Preserve original owner for record
+    } else if (action === "reject") {
+      ticket.resaleStatus = "rejected";
+      ticket.isForResale = false;
+      ticket.resalePrice = null;
+    } else {
+      return res.status(400).json({ message: "Invalid action" });
+    }
+
+    await ticket.save();
+    res.status(200).json({ message: `Ticket resale ${action}d`, ticket });
+  } catch (error) {
+    console.error("Error approving resale ticket:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const purchaseResaleTicket = async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+
+    const ticket = await TicketPurchase.findById(ticketId);
+    if (!ticket || !ticket.isForResale || ticket.resaleStatus !== "approved") {
+      return res.status(400).json({ message: "Ticket not available for resale" });
+    }
+
+    // Verify Razorpay payment
+    const razorpaySecret = "Uew5OFDPM3PjQ6TQRTyMr4MT";
+    const shasum = crypto.createHmac("sha256", razorpaySecret);
+    shasum.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const digest = shasum.digest("hex");
+
+    if (digest !== razorpay_signature) {
+      return res.status(400).json({ message: "Invalid payment signature" });
+    }
+
+    // Calculate amount and platform fee
+    const totalAmount = ticket.resalePrice * 100; // Convert to paisa
+    const platformFee = totalAmount * 0.1; // 10% platform fee
+    const amountToTransfer = totalAmount - platformFee;
+
+    // Transfer payment to original owner using Razorpay Transfers
+    const originalOwnerId = ticket.originalOwnerId;
+    const razorpay = createRazorpayInstance();
+
+    // Placeholder: Fetch owner's Razorpay account ID
+    const ownerRazorpayAccountId = await getOwnerRazorpayAccountId(originalOwnerId);
+    let transferId = null;
+
+    if (ownerRazorpayAccountId) {
+      const transfer = await razorpay.transfers.create({
+        account: ownerRazorpayAccountId,
+        amount: amountToTransfer,
+        currency: "INR",
+        on_hold: false,
+        notes: {
+          ticketId: ticketId,
+          purpose: "Resale ticket payment",
+        },
+      });
+      transferId = transfer.id;
+      console.log("Payment transferred to original owner:", transfer);
+    } else {
+      console.log(`Manual transfer required: ${amountToTransfer / 100} INR to user ${originalOwnerId}`);
+    }
+
+    // Transfer ownership
+    ticket.userId = req.user.uid; // New owner
+    ticket.isForResale = false;
+    ticket.resaleStatus = "sold";
+    ticket.resalePurchaseDate = new Date();
+
+    await ticket.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Resale ticket purchased successfully",
+      ticket,
+      transferId: transferId || "Manual transfer pending",
+    });
+  } catch (error) {
+    console.error("Error purchasing resale ticket:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Temporary implementation of getOwnerRazorpayAccountId
+async function getOwnerRazorpayAccountId(userId) {
+  // For testing, return a hardcoded Razorpay test account ID
+  // In production, replace this with actual logic to fetch from a user database or API
+  const testAccountIds = {
+    "user1": "acc_test_1234", // Example: Replace with real test account IDs from Razorpay
+    "user2": "acc_test_5678",
+  };
+
+  const accountId = testAccountIds[userId];
+  if (!accountId) {
+    console.log(`No Razorpay account ID found for user ${userId}`);
+    return null; // Triggers manual transfer
+  }
+  return accountId;
+}
 

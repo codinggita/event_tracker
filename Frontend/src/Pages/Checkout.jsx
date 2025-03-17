@@ -16,7 +16,7 @@
     const auth = getAuth();
     
     // Extract event details from location state
-    const { eventId, eventTitle, imageUrl, price } = location.state || {};
+    const { eventId, eventTitle, imageUrl, price, ticketId } = location.state || {}; // Added ticketId for resale
     const user = auth.currentUser;
 
     // Load Razorpay script
@@ -70,11 +70,12 @@
         setLoading(true);
         
         // Calculate total amount
-        const totalAmount = price * quantity;
+        const totalAmount = price * (ticketId ? 1 : quantity); // For resale tickets, quantity is fixed to 1
         
         // Create Razorpay order
         const response = await api.post("/payments/create-order", {
-          amount: totalAmount,
+          amount: totalAmount, // Updated to paisa in backend, keeping INR here for clarity
+          ticketId: ticketId || undefined, // Pass ticketId if it's a resale purchase
         });
 
         const { orderId, amount, currency } = response.data;
@@ -89,28 +90,39 @@
           amount: amount, // Amount in paisa
           currency: currency,
           name: "Event Booking",
-          description: `Payment for ${eventTitle} (${quantity} tickets)`,
+          description: ticketId ? `Purchase Resale Ticket: ${eventTitle}` : `Payment for ${eventTitle} (${quantity} tickets)`, // Updated description for resale
           order_id: orderId,
           handler: async function (response) {
             try {
               // Verify payment on your server
-              await api.post("/payments/verify", {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                eventId: eventId,
-                userId: user.uid,
-                quantity: quantity,
-                amount: totalAmount,
-                eventTitle: eventTitle  // This was missing!
-              });
-              
-              toast.success("Payment successful! Your tickets are confirmed.");
-              
-              // Redirect to tickets page instead of home
-              setTimeout(() => {
-                navigate("/");
-              }, 2000);
+              if (ticketId) {
+                // Resale ticket purchase
+                await api.post(`/tickets/${ticketId}/purchase-resale`, {
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                });
+                toast.success("Resale ticket purchased successfully!");
+                setTimeout(() => {
+                  navigate("/resale-tickets"); // Redirect to resale-tickets to refresh list
+                }, 2000);
+              } else {
+                // Normal ticket purchase
+                await api.post("/payments/verify", {
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  eventId: eventId,
+                  userId: user.uid,
+                  quantity: quantity,
+                  amount: totalAmount,
+                  eventTitle: eventTitle  // This was missing!
+                });
+                toast.success("Payment successful! Your tickets are confirmed.");
+                setTimeout(() => {
+                  navigate("/"); // Redirect to home for normal tickets
+                }, 2000);
+              }
             } catch (error) {
               console.error("Payment verification failed:", error);
               toast.error("Payment verification failed. Please contact support.");
@@ -124,6 +136,7 @@
           notes: {
             eventId: eventId,
             userId: user.uid,
+            ticketId: ticketId || undefined, // Added ticketId to notes for resale tracking
           },
           theme: {
             color: "#3399cc",
@@ -171,49 +184,53 @@
             
             <div className="event-info">
               <h3>{eventTitle}</h3>
-              <p className="price-tag">₹{price} per ticket</p>
+              <p className="price-tag">₹{price} {ticketId ? "(Resale Price)" : "per ticket"}</p> {/* Updated to indicate resale */}
             </div>
           </div>
           
-          <div className="quantity-selector">
-            <div className="quantity-controls">
-              <button 
-                type="button" 
-                className="quantity-btn"
-                onClick={() => setQuantity(prev => prev > 1 ? prev - 1 : 1)}
-              >
-                -
-              </button>
-              <input
-                id="quantity"
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={handleQuantityChange}
-                className="quantity-input"
-              />
-              <button 
-                type="button"
-                className="quantity-btn"
-                onClick={() => setQuantity(prev => prev + 1)}
-              >
-                +
-              </button>
+          {!ticketId && ( // Show quantity selector only for normal tickets
+            <div className="quantity-selector">
+              <div className="quantity-controls">
+                <button 
+                  type="button" 
+                  className="quantity-btn"
+                  onClick={() => setQuantity(prev => prev > 1 ? prev - 1 : 1)}
+                >
+                  -
+                </button>
+                <input
+                  id="quantity"
+                  type="number"
+                  min="1"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  className="quantity-input"
+                />
+                <button 
+                  type="button"
+                  className="quantity-btn"
+                  onClick={() => setQuantity(prev => prev + 1)}
+                >
+                  +
+                </button>
+              </div>
             </div>
-          </div>
+          )}
           
           <div className="order-summary">
             <div className="summary-item">
               <span>Price per ticket:</span>
               <span>₹{price}</span>
             </div>
-            <div className="summary-item">
-              <span>Quantity:</span>
-              <span>{quantity}</span>
-            </div>
+            {!ticketId && ( // Show quantity only for normal tickets
+              <div className="summary-item">
+                <span>Quantity:</span>
+                <span>{quantity}</span>
+              </div>
+            )}
             <div className="summary-item total">
               <span>Total Amount:</span>
-              <span>₹{price * quantity}</span>
+              <span>₹{price * (ticketId ? 1 : quantity)}</span> {/* Fixed amount for resale */}
             </div>
           </div>
           
