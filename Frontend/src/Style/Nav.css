@@ -228,6 +228,12 @@
   }
 }
 
+.nav-button.resell-btn{
+  border: 2px solid #B388FF;
+  margin-bottom: 5px;
+  height: 3.1em;
+}
+
 .nav-button.resell-btn.improved {
   background: linear-gradient(135deg, #8a2be2, #4b0082);
   border: none;
