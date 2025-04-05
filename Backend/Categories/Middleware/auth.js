@@ -1,5 +1,8 @@
 import admin from "firebase-admin";
-import serviceAccount from "../data/firebaseServiceAccountKey.json" assert { type: "json" };
+import fs from "fs";
+const serviceAccount = JSON.parse(
+  fs.readFileSync(new URL("../data/firebaseServiceAccountKey.json", import.meta.url))
+);
 
 // ✅ Firebase Admin SDK Initialize
 admin.initializeApp({
