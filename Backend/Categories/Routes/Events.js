@@ -22,7 +22,7 @@ import {
     purchaseResaleTicket,
     getTicketDetails,
 } from "../Controllers/Events.js"; 
-import { checkAuth } from "../middleware/auth.js"; 
+import { checkAuth } from "../Middleware/auth.js"; 
 
 const router = express.Router();
 
