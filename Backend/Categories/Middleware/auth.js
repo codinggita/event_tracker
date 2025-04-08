@@ -3,6 +3,7 @@ import admin from "firebase-admin";
 import dotenv from "dotenv";
 import path from "path";
 
+
 // Load env file correctly
 dotenv.config({ path: path.resolve("..", "config.env") });
 
