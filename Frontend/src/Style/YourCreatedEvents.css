@@ -38,6 +38,10 @@
   border-left: 5px solid #B388FF; /* Cyan border on left, matching image */
 }
 
+.your-event-icon{
+  color: #a8a3a3;
+}
+
 /* Animation for fade-in */
 @keyframes your-event-fadeIn {
   from {

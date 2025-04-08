@@ -63,7 +63,7 @@ export default function Navbar() {
               </button>
               {/* Added Resell Button */}
               <button className="nav-button resell-btn" onClick={() => navigate("/resale-tickets")}>
-                Resell
+                Resale
               </button>
               <div className="avatar-container">
                 <img
