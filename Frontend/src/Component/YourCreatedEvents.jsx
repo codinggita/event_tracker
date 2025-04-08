@@ -50,11 +50,11 @@ const YourEventCard = () => {
                   </p>
                   <div className="your-event-details">
                     <span className="your-event-creator">
-                      <FaUsers className="your-event-icon" style={{ color: '#00d4ff' }} /> {/* Cyan user icon */}
+                      <FaUsers className="your-event-icon"/> 
                       {event.createdByEmail || "Unknown User"}
                     </span>
                     <span className="your-event-location">
-                      <FaMapMarkerAlt className="your-event-icon" style={{ color: '#00d4ff' }} /> {/* Cyan location icon */}
+                      <FaMapMarkerAlt className="your-event-icon"/> 
                       {event.location || "Unknown Location"}
                     </span>
                   </div>

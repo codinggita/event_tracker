@@ -60,10 +60,10 @@ const SearchResults = () => {
                                     <p className="event-description1">{event.shortDescription}</p>
                                     <hr className="divider" />
                                     <div className="event-details">
-                                        <span className="event-creator">
+                                        <span className="event-creator1">
                                             <FaUsers className="event-icon" /> by {event.createdByEmail || "Unknown User"}
                                         </span>
-                                        <span className="event-location">
+                                        <span className="event-location1">
                                             <FaMapMarkerAlt className="event-icon" /> {event.location}
                                         </span>
                                     </div>

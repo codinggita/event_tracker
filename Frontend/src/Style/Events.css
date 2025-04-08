@@ -167,7 +167,7 @@
   transition: background-color 0.3s ease, transform 0.2s ease; /* Animation for button hover */
   display: flex;
   align-items: center;
-  gap: 5px;
+  margin-top: 20px;
 }
 
 .view-detail-button:hover {
