@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { auth } from '../Component/firebase';
 
-const server = "http://localhost:5000/api"; // Removed trailing slash
+const server = "https://eventtracker-backend.onrender.com/api"; // Removed trailing slash
 const api = axios.create({
   baseURL: server,
   headers: {
