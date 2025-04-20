@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";  // 🛠️ Yeh line add karo
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
-  base: '/',  // ✅ Render ke liye correct
+  base: '/', // ✅ Render ke liye required
   plugins: [react()],
   server: {
     port: 5173,
