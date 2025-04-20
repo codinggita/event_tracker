@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../style/CreateEvent.css";
+import '@/style/CreateEvent.css';
 import Loader from "../Component/Loader"; // Loader import
 
 const CreateEventForm = () => {
