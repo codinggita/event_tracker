@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { MdEmail, MdPhone } from 'react-icons/md';
-import '@/style/Footer.css';
+import "../Style/Footer.css";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
