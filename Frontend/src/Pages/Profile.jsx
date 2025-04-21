@@ -22,7 +22,7 @@ const Profile = () => {
         
         if (!user) {
           console.log("User not logged in");
-          navigate("/login"); // Redirect to login if not logged in
+          navigate("/"); // Redirect to login if not logged in
           return;
         }
         
