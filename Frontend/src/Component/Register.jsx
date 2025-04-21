@@ -36,7 +36,7 @@ function Register() {
         await sendEmailVerification(user);
         toast.success("Verification email sent! Please check your inbox.", { position: "top-center" });
 
-        setTimeout(() => { navigate("/logi"); }, 3000);
+        setTimeout(() => { navigate("/login"); }, 3000);
       }
     } catch (error) {
       toast.error(error.message, { position: "bottom-center" });
