@@ -10,7 +10,7 @@ dotenv.config();
 dotenv.config({ path: path.resolve('data', 'config.env') });
 
 const app = express();
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "https://event-tracker-frontend-l8ve.onrender.com", credentials: true }));
 app.use(express.json());
 
 connectDB();
