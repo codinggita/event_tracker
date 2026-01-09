@@ -1,8 +1,11 @@
 import Event from "../Models/EventCard.js";
+import Review from "../Models/Review.js";
 import { createRazorpayInstance } from "../Config/razorpay.config.js";
 import { createEmailTransporter } from "../Config/email.config.js";
 import crypto from "crypto";
 import TicketPurchase from "../Models/Transaction.js";
+import mongoose from "mongoose";
+
 
 // ✅ Create Event
 export const createEvent = async (req, res) => {
@@ -94,6 +97,101 @@ export const eventDetailPage = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 }
+
+// Recalculate and persist average rating + count for an event
+const recalcEventRating = async (eventId) => {
+  const stats = await Review.aggregate([
+    { $match: { eventId: new mongoose.Types.ObjectId(eventId) } },
+    {
+      $group: {
+        _id: null,
+        averageRating: { $avg: "$rating" },
+        ratingCount: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const averageRatingRaw = stats[0]?.averageRating || 0;
+  const ratingCount = stats[0]?.ratingCount || 0;
+  const averageRating = Number(averageRatingRaw.toFixed(2));
+
+  await Event.findByIdAndUpdate(eventId, { averageRating, ratingCount });
+  return { averageRating, ratingCount };
+};
+
+// Create or update a review for an event
+export const addOrUpdateReview = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { rating, comment = "" } = req.body;
+
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res.status(400).json({ message: "Invalid event ID" });
+    }
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "Rating must be between 1 and 5" });
+    }
+
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    const existingReview = await Review.findOne({ eventId, userId: req.user.uid });
+    const userName = req.user.name || req.user.email || "Anonymous";
+
+    let review;
+    if (existingReview) {
+      existingReview.rating = rating;
+      existingReview.comment = comment;
+      review = await existingReview.save();
+    } else {
+      review = await Review.create({
+        eventId,
+        userId: req.user.uid,
+        userName,
+        rating,
+        comment,
+      });
+    }
+
+    const stats = await recalcEventRating(eventId);
+
+    res.status(existingReview ? 200 : 201).json({
+      message: existingReview ? "Review updated" : "Review added",
+      review,
+      ...stats,
+    });
+  } catch (error) {
+    console.error("Add review error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Fetch reviews for an event with optional sorting
+export const getEventReviews = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const sort = req.query.sort || "newest";
+
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res.status(400).json({ message: "Invalid event ID" });
+    }
+
+    let sortOption = { createdAt: -1 };
+    if (sort === "highest") {
+      sortOption = { rating: -1, createdAt: -1 };
+    }
+
+    const reviews = await Review.find({ eventId }).sort(sortOption);
+    const stats = await recalcEventRating(eventId);
+
+    res.status(200).json({ reviews, ...stats });
+  } catch (error) {
+    console.error("Get reviews error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
     // Delete Event (Only Creator)
 export const deleteEvent = async (req, res) => {
