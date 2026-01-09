@@ -419,7 +419,7 @@ export const listTicketForResale = async (req, res) => {
     const transporter = createEmailTransporter();
 
     // Generate approval/rejection links
-    const baseUrl = "http://localhost:5173"; // Frontend URL (adjust port if needed)
+    const baseUrl = "https://event-tracker-frontend-l8ve.onrender.com"; // Frontend URL (adjust port if needed)
     const approveLink = `${baseUrl}/tickets/${ticketId}/approve?action=approve`;
     const rejectLink = `${baseUrl}/tickets/${ticketId}/approve?action=reject`;
 

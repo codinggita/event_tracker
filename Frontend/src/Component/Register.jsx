@@ -60,7 +60,7 @@ function Register() {
         
         toast.success("Account created successfully!", { position: "top-center" });
 
-        setTimeout(() => { window.location.href = "/profile"; }, 2000);
+        setTimeout(() => { window.location.href = "/"; }, 2000);
       } catch (error) {
         toast.error("Error creating account: " + error.message, { position: "top-center" });
       }

@@ -23,7 +23,7 @@ export async function googleLogin(isRegistration = false) {
           toast.success("User logged in Successfully", {
             position: "top-center",
           });
-          window.location.href = "/profile";
+          window.location.href = "/";
           return user;
         } else {
           // User doesn't exist, log them out

@@ -1,93 +1,139 @@
 # Event Tracker
 
-🚀 **Event Tracker** is a modern platform designed to help users discover, create, and manage events effortlessly. From ticketing to notifications, it offers a seamless experience for both event attendees and organizers.
+A modern event management platform that enables users to discover, create, and manage events with integrated ticketing, payments, and notifications.
 
-## 🌟 Features
-- 🔍 **Event Search** - Find events by category, location, and date.
-- 📝 **Event Creation** - Organizers can create and manage their events.
-- 🎟️ **Ticketing System** - Secure event ticketing with easy payment options.
-- 👤 **User Profiles** - Personalized user experience and event history.
-- 📢 **Event Sharing** - Share events on social media platforms.
-- 🔔 **Notifications** - Stay updated with event reminders and updates.
-- ⭐ **Event Reviews** - Users can rate and review events.
-- 🛠️ **Admin Dashboard** - Manage users, events, and tickets.
-- 🗺️ **Interactive Map** - Locate events using Google Maps integration.
-- 🎭 **Event Categories** - Explore events across multiple categories.
+🌐 **Live Demo:** [https://event-tracker-frontend-l8ve.onrender.com/](https://event-tracker-frontend-l8ve.onrender.com/)
 
-## 🎯 Target Audience
-- **Event Attendees** - Users searching for events in categories like music, tech, sports, and festivals.
-- **Event Organizers** - Individuals and organizations looking to host and manage events.
-- **Ticket Buyers** - Users looking for a seamless and secure ticketing experience.
+## 🚀 Features
 
-## 💡 Unique Selling Proposition (USP)
-✅ A user-friendly platform with **personalized event recommendations** and **seasonal event highlights** like **Diwali, Holi, Christmas**, and more!
+- **Event Discovery** - Search events by category, location, and date
+- **Event Management** - Create and manage events with admin dashboard
+- **Ticketing System** - Secure ticket booking with Razorpay integration
+- **User Profiles** - Personalized experience with event history
+- **Notifications** - Email notifications for bookings and updates
+- **Ticket Resale** - Resell tickets through the platform
+- **Interactive Maps** - Event location visualization
 
-## ⚒️ Tech Stack
-### **Frontend**
-- React.js
-- Tailwind CSS
+## 🛠️ Tech Stack
 
-### **Backend**
-- Node.js with Express
-- MongoDB
+**Frontend:** React.js, Tailwind CSS, Vite  
+**Backend:** Node.js, Express.js  
+**Database:** MongoDB  
+**Payment:** Razorpay  
+**Authentication:** Firebase Auth  
+**Email:** Brevo (SMTP)
 
-### **Payment Integration**
-- Google Pay API / PayPal API
+## 📋 Prerequisites
 
-### **Map Integration**
-- Google Maps API
+- Node.js (v16 or higher)
+- MongoDB (local or cloud instance)
+- Firebase project with Authentication enabled
+- Razorpay account
+- Brevo account for email services
 
-### **Design & Prototyping**
-- Figma
+## ⚙️ Installation & Setup
 
-### **Collaboration Tools**
-- Git/GitHub
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd event_tracker
+```
 
-## 📊 Success Metrics
-We will measure the project's success using:
-- 📈 **User Engagement** - Active users and interactions.
-- 🎟️ **Event Listings Growth** - Number of events created.
-- 🌍 **Website Traffic** - Visitor count and analytics.
-- 💳 **Conversion Rates** - Ticket sales and signups.
-- 🔁 **Retention Metrics** - Returning users and repeat attendees.
+### 2. Backend Setup
 
-## ⚠️ Potential Risks & Challenges
-- 🏆 **Competition** - Competing with established platforms like Eventbrite.
-- 💰 **Payment Issues** - Secure and smooth transactions.
-- 📈 **Scalability** - Handling large numbers of events and users.
-- 🛑 **Technical Glitches** - Server downtime, bugs, and performance issues.
-- 🔒 **Data Security** - Ensuring user and payment data protection.
+```bash
+cd Backend/Categories
+npm install
+```
 
-## 🔮 Future Plans & Scaling
-🚀 **Upcoming Enhancements:**
-- 🎟️ **Dynamic Discounts** - Offer discounts based on demand.
-- 💎 **Premium Subscription Models** - Exclusive features for paid users.
-- 🤖 **AI-Powered Event Recommendations** - Smart suggestions based on user interests.
-- 🌍 **Multi-language Support** - Expanding to global audiences.
-- 🔗 **Social Media Integration** - Seamless sharing and event promotion.
+Create a `config.env` file in `Backend/Categories/data/` directory with the following variables:
 
-## config.env file inside Data folder for Backend.
-### Keys :-
-- PORT
-- MONGO_URI
-- SMTP_HOST
-- SMTP_PORT
-- SMTP_USER
-- SMTP_PASS
-- BREVO_API_KEY
-- SMTP_SECURE
-- RAZORPAY_KEY_ID
-- RAZORPAY_KEY_SECRET
----
+```env
+PORT=4000
+MONGO_URI=your_mongodb_connection_string
+SMTP_HOST=smtp-relay.brevo.com
+SMTP_PORT=587
+SMTP_USER=your_brevo_email
+SMTP_PASS=your_brevo_password
+BREVO_API_KEY=your_brevo_api_key
+SMTP_SECURE=false
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+FIREBASE_PRIVATE_KEY=your_firebase_private_key
+FIREBASE_CLIENT_EMAIL=your_firebase_client_email
+FIREBASE_PROJECT_ID=your_firebase_project_id
+```
 
-## 📜 License
-This project is licensed under the **MIT License**.
+Start the backend server:
+```bash
+npm run dev
+```
+
+### 3. Frontend Setup
+
+```bash
+cd Frontend
+npm install
+```
+
+Configure Firebase in `Frontend/src/Component/firebase.js` with your Firebase credentials.
+
+Start the development server:
+```bash
+npm run dev
+```
+
+## 📁 Project Structure
+
+```
+event_tracker/
+├── Backend/
+│   └── Categories/
+│       ├── Controllers/
+│       ├── Models/
+│       ├── Routes/
+│       ├── Middleware/
+│       ├── Config/
+│       ├── data/
+│       │   └── config.env (create this file)
+│       └── server.js
+└── Frontend/
+    └── src/
+        ├── Component/
+        ├── Pages/
+        ├── services/
+        └── Style/
+```
+
+## 🔑 Environment Variables
+
+All required environment variables are listed above in the **Backend Setup** section. Ensure you have:
+
+- **MongoDB URI** - Database connection string
+- **Razorpay Keys** - Payment gateway credentials
+- **Brevo/SMTP** - Email service credentials
+- **Firebase** - Authentication credentials
 
 ## 🤝 Contributing
-We welcome contributions! Feel free to fork the repository and submit pull requests.
 
-## 📩 Contact
-For any queries, reach out at **rijans.patoliya.cg@gmail.com** or connect with us on [LinkedIn](https://www.linkedin.com/in/rijans-patoliya/).
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 📧 Contact
+
+**Rijans Patoliya**  
+Email: rijans.patoliya.cg@gmail.com  
+LinkedIn: [rijans-patoliya](https://www.linkedin.com/in/rijans-patoliya/)
 
 ---
-🌟 **Don't forget to ⭐ this repository if you like it!**
+
+⭐ If you find this project helpful, please give it a star!

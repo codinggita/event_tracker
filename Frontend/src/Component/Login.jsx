@@ -1,27 +1,26 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { auth, db } from "./firebase";
+import { auth } from "./firebase";
 import { toast, ToastContainer } from "react-toastify";
-import { doc, getDoc } from "firebase/firestore";
 import SignInwithGoogle, { googleLogin } from "./signInWithGoogle";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import "../Style/Auth.css";
-import { useNavigate, useLocation } from "react-router-dom"; // Added imports
+import { useNavigate, useLocation, Link } from "react-router-dom"; // Added Link here
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  
-  const navigate = useNavigate(); // Added for navigation
-  const location = useLocation(); // Added to get query params
-  const redirect = new URLSearchParams(location.search).get("redirect"); // Get redirect URL from query
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirect = new URLSearchParams(location.search).get("redirect");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -34,7 +33,7 @@ function Login() {
 
       const token = await user.getIdToken(true);
       localStorage.setItem("authToken", token);
-      
+
       setInterval(async () => {
         const currentUser = auth.currentUser;
         if (currentUser) {
@@ -45,7 +44,7 @@ function Login() {
 
       toast.success("User logged in Successfully", { position: "top-center" });
       setTimeout(() => {
-        navigate(redirect || "/"); // Redirect to approval page or home
+        navigate(redirect || "/");
       }, 2000);
     } catch (error) {
       toast.error(error.message, { position: "bottom-center" });
@@ -60,7 +59,7 @@ function Login() {
     if (user) {
       toast.success("Google Sign-In Successful!", { position: "top-center" });
       setTimeout(() => {
-        navigate(redirect || "/"); // Redirect after Google Sign-In
+        navigate(redirect || "/");
       }, 2000);
     }
     setLoading(false);
@@ -116,7 +115,7 @@ function Login() {
           </button>
 
           <p className="auth-redirect">
-            Don't have an account? <a href="/register">Sign up</a>
+            Don't have an account? <Link to="/register">Sign up</Link>
           </p>
         </form>
       </div>
