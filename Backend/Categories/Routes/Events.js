@@ -10,6 +10,9 @@ import { createEvent,
     createOrder,
     verifyPayment,
     getUserTickets,
+    addOrUpdateReview,
+    getEventReviews,
+
 } from "../Controllers/Events.js";
 import {
     registerForEvent,
@@ -33,6 +36,8 @@ router.get("/yourEvents", checkAuth, yourEvents);
 router.put("/editEvent/:id", checkAuth, editEvent);
 router.delete("/deleteEvent/:id", checkAuth, deleteEvent);
 router.get("/eventDetail/:id", eventDetailPage);
+router.get("/events/:eventId/reviews", getEventReviews);
+router.post("/events/:eventId/reviews", checkAuth, addOrUpdateReview);
 router.post("/registerEvent", checkAuth, registerForEvent);
 router.get("/registeredUsers/:eventId", getRegisteredUsers);
 router.get("/searchEvents", searchEvents); // ✅ Search API

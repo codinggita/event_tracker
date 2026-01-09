@@ -1,8 +1,9 @@
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense ,useRef} from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { BsCalendarEvent, BsGeoAlt, BsX, BsSend } from "react-icons/bs";
 import { BiRupee } from "react-icons/bi";
+import { FaStar } from "react-icons/fa";
 import api from "../services/api";
 import "../Style/EventDetail.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -163,6 +164,15 @@ const EventDetail = () => {
   });
 
   const [user, setUser] = useState(null);
+    const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef(null);
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [submittingReview, setSubmittingReview] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); // Added for accessing resalePrice and ticketId
   const { resalePrice, ticketId } = location.state || {}; // Extract resalePrice and ticketId from navigation state
@@ -206,6 +216,32 @@ const EventDetail = () => {
       isMounted = false;
     };
   }, [id]);
+
+    // Close sort dropdown on outside click
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (sortRef.current && !sortRef.current.contains(e.target)) {
+        setIsSortOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!id) return;
+      try {
+        const response = await api.get(`/events/${id}/reviews`, { params: { sort: sortBy } });
+        setReviews(response.data.reviews || []);
+        setAverageRating(Number(response.data.averageRating || 0));
+        setRatingCount(Number(response.data.ratingCount || 0));
+      } catch (fetchError) {
+        console.error("Failed to load reviews", fetchError);
+      }
+    };
+    fetchReviews();
+  }, [id, sortBy]);
 
   const handleQuerySubmit = async (e) => {
     e.preventDefault();
@@ -280,6 +316,50 @@ const EventDetail = () => {
   // Updated to use resalePrice if available
   const effectivePrice = resalePrice || (event ? event.price : "N/A");
 
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+
+    if (!user) {
+      toast.error("Please login to leave a review");
+      return;
+    }
+
+    if (!rating) {
+      toast.error("Select a rating between 1 and 5 stars");
+      return;
+    }
+
+    try {
+      setSubmittingReview(true);
+      await api.post(`/events/${id}/reviews`, { rating, comment });
+      const listResponse = await api.get(`/events/${id}/reviews`, { params: { sort: sortBy } });
+      setReviews(listResponse.data.reviews || []);
+      setAverageRating(Number(listResponse.data.averageRating || 0));
+      setRatingCount(Number(listResponse.data.ratingCount || 0));
+      setComment("");
+      toast.success("Review submitted");
+    } catch (submitError) {
+      console.error("Review submit error", submitError);
+      toast.error(submitError.response?.data?.message || "Could not submit review");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
+  const renderStars = (value) =>
+    [1, 2, 3, 4, 5].map((star) => (
+      <button
+        key={star}
+        type="button"
+        className={`star-button ${value >= star ? "filled" : ""}`}
+        onClick={() => setRating(star)}
+        aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
+      >
+        <FaStar />
+      </button>
+    ));
+
+
   if (loading) {
     return <Loader />;
   }
@@ -302,6 +382,108 @@ const EventDetail = () => {
           handleCheckout={handleCheckout}
           setShowQueryForm={setShowQueryForm}
         />
+
+        <section className="reviews-section">
+          <div className="reviews-header">
+            <div>
+              <h2>Event Reviews</h2>
+              <div className="rating-summary">
+                <span className="rating-score">{averageRating.toFixed(1)}</span>
+                <div className="rating-stars static-stars">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <FaStar key={star} className={averageRating >= star ? "filled" : ""} />
+                  ))}
+                </div>
+                <span className="rating-count">{ratingCount} review{ratingCount === 1 ? "" : "s"}</span>
+              </div>
+            </div>
+            <div className="review-sort">
+              <div className="sort-dropdown" ref={sortRef}>
+                <button
+                  type="button"
+                  className="sort-toggle"
+                  onClick={() => setIsSortOpen((v) => !v)}
+                  aria-expanded={isSortOpen}
+                  aria-haspopup="listbox"
+                >
+                  {sortBy === "newest" ? "Newest" : "Most Rated"}
+                  <span className={`chev ${isSortOpen ? "open" : ""}`}>▾</span>
+                </button>
+                {isSortOpen && (
+                  <div className="sort-menu" role="listbox" aria-label="Sort reviews">
+                    <button
+                      className={`sort-option ${sortBy === "newest" ? "selected" : ""}`}
+                      role="option"
+                      aria-selected={sortBy === "newest"}
+                      onClick={() => {
+                        setSortBy("newest");
+                        setIsSortOpen(false);
+                      }}
+                    >
+                      Newest
+                    </button>
+                    <button
+                      className={`sort-option ${sortBy === "highest" ? "selected" : ""}`}
+                      role="option"
+                      aria-selected={sortBy === "highest"}
+                      onClick={() => {
+                        setSortBy("highest");
+                        setIsSortOpen(false);
+                      }}
+                    >
+                      Most Rated
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="review-form-card">
+            <h3>Leave a review</h3>
+            <form onSubmit={handleSubmitReview} className="review-form">
+              <div className="rating-input">
+                <span>Your rating</span>
+                <div className="rating-stars">{renderStars(rating)}</div>
+              </div>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Share your experience"
+                rows={4}
+              />
+              <button type="submit" className="submit-review" disabled={submittingReview}>
+                {submittingReview ? "Submitting..." : "Submit Review"}
+              </button>
+            </form>
+          </div>
+
+          <div className="reviews-list">
+            {reviews.length === 0 ? (
+              <p className="no-reviews">No reviews yet. Be the first to share your thoughts!</p>
+            ) : (
+              reviews.map((item) => (
+                <div key={item._id} className="review-card">
+                  <div className="review-card-header">
+                    <div className="reviewer-info">
+                      <div className="avatar-circle">{item.userName?.[0]?.toUpperCase() || "U"}</div>
+                      <div>
+                        <p className="reviewer-name">{item.userName || "Guest"}</p>
+                        <p className="review-date">{new Date(item.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <div className="rating-stars static-stars">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <FaStar key={star} className={item.rating >= star ? "filled" : ""} />
+                      ))}
+                    </div>
+                  </div>
+                  {item.comment && <p className="review-text">{item.comment}</p>}
+                </div>
+              ))
+            )}
+          </div>
+        </section>
         
         {showQueryForm && (
           <QueryFormModal

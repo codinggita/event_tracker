@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { auth } from '../Component/firebase';
 
-const server = "http://localhost:5000/api"; // Removed trailing slash
+const server = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const api = axios.create({
   baseURL: server,
   headers: {

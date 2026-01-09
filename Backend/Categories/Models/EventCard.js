@@ -11,7 +11,9 @@ const eventSchema = new mongoose.Schema({
   category: { type: String, required: true },
   createdBy: { type: String, required: true },
   createdByEmail: { type: String, required: true },
-  attendees: [{ type: String }] // ✅ Attendees list (User Firebase UID)
+  attendees: [{ type: String }], // ✅ Attendees list (User Firebase UID)
+  averageRating: { type: Number, default: 0 },
+  ratingCount: { type: Number, default: 0 }
 });
 
 const Event = mongoose.model("Event", eventSchema);
